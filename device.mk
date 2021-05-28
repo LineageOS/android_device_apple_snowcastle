@@ -85,6 +85,11 @@ DEVICE_PACKAGE_OVERLAYS += \
 PRODUCT_PACKAGES += \
     MainlineGenericWifiOverlay
 
+ifneq ($(LINEAGE_BUILD),)
+DEVICE_PACKAGE_OVERLAYS += \
+    $(DEVICE_PATH)/overlays/overlay-lineage
+endif
+
 # Page size
 PRODUCT_CHECK_PREBUILT_MAX_PAGE_SIZE := true
 
