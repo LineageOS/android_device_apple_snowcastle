@@ -8,8 +8,23 @@
 
 #include <libinit_mainline_common.h>
 #include <libinit_misc.h>
+#include <libinit_utils.h>
+
+#include <string>
+#include <unordered_map>
+
+static constexpr char kDtBasePath[] = "/sys/firmware/devicetree/base/";
+
+static const std::unordered_map<std::string, std::string> kDtPathToPropertyMap = {
+        {"chosen/asahi,iboot2-version", "ro.bootloader"},
+        {"smbios/smbios/system/serial", "ro.serialno"},
+};
 
 void vendor_load_properties() {
     vendor_load_properties_mainline_common();
     enable_insecure_debugging();
+
+    for (const auto& [path, prop] : kDtPathToPropertyMap) {
+        set_prop_from_file(prop, kDtBasePath + path);
+    }
 }
