@@ -5,6 +5,16 @@
 
 import /vendor/etc/init/hw/init.mainline.rc
 
+# Cpuset
+on early-boot
+    write /dev/cpuset/background/cpus 0-3
+    write /dev/cpuset/camera-daemon/cpus 0-3
+    write /dev/cpuset/foreground/cpus 0-3
+    write /dev/cpuset/foreground_window/cpus 0-3
+    write /dev/cpuset/restricted/cpus 0-3
+    write /dev/cpuset/system-background/cpus 0-3
+    write /dev/cpuset/top-app/cpus 0-3
+
 # Display
 on property:sys.bootstat.first_boot_completed=1
     write /sys/class/vtconsole/vtcon0/bind 0
