@@ -10,6 +10,7 @@ SNOWCASTLE_PARTITION_SCHEME ?= normal
 $(warning Using $(SNOWCASTLE_PARTITION_SCHEME) partition scheme)
 
 # Inherit from mainline/common
+TARGET_HEALTH_HAL := default-aidl
 TARGET_INITIAL_BRINGUP := true
 TARGET_USES_FRAMEBUFFER_DISPLAY := true
 include device/mainline/common/optional/options.mk
