@@ -56,8 +56,8 @@ BOARD_KERNEL_IMAGE_NAME := Image.gz
 TARGET_KERNEL_SOURCE := kernel/apple/HoolockLinux
 
 TARGET_KERNEL_CONFIG_EXT := \
-    $(DEVICE_PATH)/kconfigs/config-postmarketos-apple-4k.aarch64 \
-    $(DEVICE_PATH)/kconfigs/apple.config \
+    $(DEVICE_PATH)/configs/kernel/config-postmarketos-apple-4k.aarch64 \
+    $(DEVICE_PATH)/configs/kernel/apple.config \
     kernel/mainline/configs/fragments/android-base-pre/common.config \
     kernel/mainline/configs/fragments/android-base-pre/arm64.config \
     kernel/configs/b/android-6.12/android-base.config \
@@ -91,7 +91,7 @@ TARGET_BOARD_PLATFORM := snowcastle
 
 # Recovery
 TARGET_RECOVERY_DENSITY := xxhdpi
-TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/configs/fstab.$(SNOWCASTLE_PARTITION_SCHEME)
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/configs/fstab/fstab.$(SNOWCASTLE_PARTITION_SCHEME)
 
 # VINTF
 DEVICE_MANIFEST_FILE := \
