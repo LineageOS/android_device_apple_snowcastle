@@ -12,6 +12,12 @@ We have no way to tether boot Android yet.
 
 ## How-to
 
+### Obtain firmwares
+
+1. Obtain iOS kernel using blacktop's [tool](https://github.com/blacktop/ipsw), for example: `ipsw download ipsw --device iPhone10,1 --build 20H380 --kernel`
+
+2. Extract firmwares from the iOS kernel using [hKernelFWExtractor](https://github.com/HoolockLinux/hKernelFWExtractor).
+
 ### Build Android
 
 Here we use LineageOS as example, and expecting you already synced the platform source code.
@@ -35,7 +41,9 @@ Execute this to select the wanted partition scheme: `export SNOWCASTLE_PARTITION
 
 7. Specify the full path to extracted latest LLVM toolchain. For example: `export TARGET_KERNEL_CLANG_PATH=~/Downloads/LLVM-22.1.0-Linux-X64`.
 
-8. Start the build: `m m1n1-{boot,recovery} systemimage vendorimage`.
+8. Put the extracted firmwares into `device/apple/snowcastle/prebuilts/firmware` directory.
+
+9. Start the build: `m m1n1-{boot,recovery} systemimage vendorimage`.
 
 ### Jailbreak and enter device shell
 
