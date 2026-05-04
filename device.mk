@@ -22,6 +22,10 @@ TARGET_SCREEN_HEIGHT := 300
 # Dalvik heap
 $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 
+# Firmware
+PRODUCT_COPY_FILES += \
+    $(call find-copy-subdir-files,*,$(DEVICE_PATH)/prebuilts/firmware/,$(TARGET_COPY_OUT_VENDOR)/firmware/)
+
 # HIDL
 PRODUCT_PACKAGES += \
     vndservicemanager
@@ -67,6 +71,7 @@ PRODUCT_COPY_FILES += \
 
 # Recovery
 PRODUCT_COPY_FILES += \
+    $(call find-copy-subdir-files,*,$(DEVICE_PATH)/prebuilts/firmware/,$(TARGET_COPY_OUT_RECOVERY)/root/vendor/firmware/) \
     $(DEVICE_PATH)/configs/init/init.recovery.snowcastle.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.snowcastle.rc
 
 # Shipping API level
