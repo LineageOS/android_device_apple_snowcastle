@@ -69,6 +69,15 @@ TARGET_KERNEL_CONFIG_EXT := \
     kernel/mainline/configs/fragments/n/faster-build-time.config
 endif
 
+# Kernel modules
+BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD := \
+    $(strip $(shell cat $(DEVICE_PATH)/configs/modprobe/modules.load.basic))
+BOARD_VENDOR_KERNEL_MODULES_LOAD := \
+    $(BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD)
+RECOVERY_KERNEL_MODULES := \
+    $(BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD)
+TARGET_AUTO_COLLECT_KERNEL_MODULE_DEPS := true
+
 # OTA
 ifeq ($(SNOWCASTLE_PARTITION_SCHEME),apfs)
 TARGET_SKIP_OTA_PACKAGE := true
