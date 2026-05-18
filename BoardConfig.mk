@@ -31,13 +31,20 @@ BOARD_KERNEL_CMDLINE := \
     androidboot.verifiedbootstate=orange \
     console=tty0
 
-ifeq ($(SNOWCASTLE_PARTITION_SCHEME),apfs)
-BOARD_KERNEL_CMDLINE += \
+BOARD_KERNEL_CMDLINE_BOOT :=
+BOARD_KERNEL_CMDLINE_RECOVERY := quiet
+
+ifneq ($(SNOWCASTLE_PARTITION_SCHEME),normal)
+BOARD_KERNEL_CMDLINE_BOOT += \
     androidboot.init_fatal_pause=true \
     androidboot.mount_firmware=false \
-    androidboot.mount_system=imgs \
-    androidboot.mount_userdata=tmpfs \
     rdinit=/system/bin/generic_init
+endif
+
+ifeq ($(SNOWCASTLE_PARTITION_SCHEME),apfs)
+BOARD_KERNEL_CMDLINE_BOOT += \
+    androidboot.mount_system=imgs \
+    androidboot.mount_userdata=tmpfs
 endif
 
 # Display
