@@ -5,6 +5,9 @@
 
 USES_DEVICE_APPLE_SNOWCASTLE := true
 
+# Kernel
+TARGET_BOOTS_16K := true
+
 # Inherit from mainline/common
 include device/mainline/common/BoardConfigMainlineCommon.mk
 
@@ -48,8 +51,6 @@ TARGET_USERIMAGES_USE_F2FS := true
 TARGET_USERIMAGES_USE_EXT4 := true
 
 # Kernel
-TARGET_BOOTS_16K := true
-
 ifneq ($(wildcard device/apple/snowcastle-kernel/Image.gz-dtb),)
 $(warning Using prebuilt kernel)
 TARGET_PREBUILT_KERNEL := device/apple/snowcastle-kernel/Image.gz-dtb
