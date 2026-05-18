@@ -20,7 +20,7 @@ We have no way to tether boot Android yet.
 
 ### Build Android
 
-Here we use LineageOS as example, and expecting you already synced the platform source code.
+Here we use LineageOS as example, and assuming you have already synced the platform source code.
 
 1. Setup the build environment: `source build/envsetup.sh`.
 
@@ -53,7 +53,7 @@ Execute this to select the wanted partition scheme: `export SNOWCASTLE_PARTITION
 
 3. Connect to the device's shell, via SSH: `ssh mobile@<Device IP address>`.
 
-4. Set password for user `root`: `passwd root`.
+4. Set password for user `root`: `sudo passwd root`.
 
 5. Exit the shell, and reconnect as user `root`: `ssh root@<Device IP address>`.
 
