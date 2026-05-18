@@ -43,6 +43,11 @@ PRODUCT_PACKAGES += \
 $(call soong_config_set,libinit,vendor_init_lib,//$(DEVICE_PATH):init_snowcastle)
 $(call soong_config_set,mainline_common_libinit,set_properties_from,devicetree)
 
+ifneq ($(SNOWCASTLE_PARTITION_SCHEME),normal)
+PRODUCT_PACKAGES += \
+    generic_init_first_stage
+endif
+
 # Images
 PRODUCT_BUILD_BOOT_IMAGE := true
 PRODUCT_BUILD_DEBUG_BOOT_IMAGE := true
@@ -82,3 +87,8 @@ PRODUCT_SHIPPING_API_LEVEL := 33
 PRODUCT_SOONG_NAMESPACES += \
     $(DEVICE_PATH) \
     kernel/mainline/configs
+
+ifneq ($(SNOWCASTLE_PARTITION_SCHEME),normal)
+PRODUCT_SOONG_NAMESPACES += \
+    device/mainline/generic
+endif

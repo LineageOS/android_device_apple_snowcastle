@@ -3,22 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-# Base
-/dev/block/by-name/base /oem apfs ro,vol=15 first_stage_mount,ensure_path_accessible=android/system.img;android/vendor.img
-/dev/block/by-name/base /oem apfs ro,vol=14 first_stage_mount,ensure_path_accessible=android/system.img;android/vendor.img
-/dev/block/by-name/base /oem apfs ro,vol=13 first_stage_mount,ensure_path_accessible=android/system.img;android/vendor.img
-/dev/block/by-name/base /oem apfs ro,vol=12 first_stage_mount,ensure_path_accessible=android/system.img;android/vendor.img
-/dev/block/by-name/base /oem apfs ro,vol=11 first_stage_mount,ensure_path_accessible=android/system.img;android/vendor.img
-/dev/block/by-name/base /oem apfs ro,vol=10 first_stage_mount,ensure_path_accessible=android/system.img;android/vendor.img
-/dev/block/by-name/base /oem apfs ro,vol=9 first_stage_mount,ensure_path_accessible=android/system.img;android/vendor.img
-/dev/block/by-name/base /oem apfs ro,vol=8 first_stage_mount,ensure_path_accessible=android/system.img;android/vendor.img
-/dev/block/by-name/base /oem apfs ro,vol=7 first_stage_mount,ensure_path_accessible=android/system.img;android/vendor.img
-/dev/block/by-name/base /oem apfs ro,vol=6 first_stage_mount,ensure_path_accessible=android/system.img;android/vendor.img
-/dev/block/by-name/base /oem apfs ro,vol=5 first_stage_mount,ensure_path_accessible=android/system.img;android/vendor.img
-/dev/block/by-name/base /oem apfs ro,vol=4 first_stage_mount,ensure_path_accessible=android/system.img;android/vendor.img
+# Boot
+/dev/null /boot emmc defaults defaults
 
-# System
-/oem/android/system.img /system ext4 noatime,ro first_stage_mount
-
-# Vendor
-/oem/android/vendor.img /vendor ext4 noatime,ro first_stage_mount
+# Recovery
+/dev/null /recovery emmc defaults defaults
