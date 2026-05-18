@@ -32,7 +32,7 @@ Here we use LineageOS as example, and assuming you have already synced the platf
 
 5. Select a partition scheme to use.
 
-- "apfs": Android will be loaded from partition images stored in APFS volume. This requires some patches in `system/core` to be picked, and APFS support in the kernel, which are currently undocumented. Userdata would be stored in RAM, due to the existing APFS support on Linux not being capable of writing yet.
+- "apfs": Android will be loaded from partition images stored in APFS volume. Userdata would be stored in RAM, due to the existing APFS support on Linux not being capable of writing yet.
 - "normal": Android will be loaded from normal partitions on the disk. This requires resizing APFS volume and modifying the partition table on the disk.
 
 Execute this to select the wanted partition scheme: `export SNOWCASTLE_PARTITION_SCHEME=<wanted partition scheme>`
@@ -43,7 +43,16 @@ Execute this to select the wanted partition scheme: `export SNOWCASTLE_PARTITION
 
 8. Put the extracted firmwares into `device/apple/snowcastle/prebuilts/firmware` directory.
 
-9. Start the build: `m m1n1-{boot,recovery} systemimage vendorimage`.
+9. If you have selected APFS partition scheme, do the following to obtain and adapt the necessary `linux-apfs-rw` module:
+
+```
+git clone https://github.com/linux-apfs/linux-apfs-rw kernel/apple/HoolockLinux-modules/linux-apfs-rw
+sed -i 's|KERNEL_DIR|KERNEL_SRC|g;s|make |$(MAKE) |g;s|install:|modules_install:|g' kernel/apple/HoolockLinux-modules/linux-apfs-rw/Makefile
+```
+
+If this has already been done previously, skip this step.
+
+10. Start the build: `m m1n1-{boot,recovery} systemimage vendorimage`.
 
 ### Jailbreak and enter device shell
 
@@ -87,9 +96,16 @@ Here are the partitions that Android needs:
 
 4. Enter fastbootd mode, and flash the built `system.img` and `vendor.img` via fastboot.
 
-### Preparations for APFS partition scheme
+### Preparation and Flashing for APFS partition scheme
 
-TODO.
+This section is applicable only if you want Android being installed in an APFS volume.
+The Android firmware should be built with environment variable `SNOWCASTLE_PARTITION_SCHEME=apfs`.
+
+1. Create the directory for storing Android images: `/private/preboot/android`.
+
+2. Exit the SSH shell: `exit`.
+
+3. Copy the Android images to the device: `scp system.img vendor.img root@<Device IP address>:/private/preboot/android/`.
 
 ### Boot Android
 
