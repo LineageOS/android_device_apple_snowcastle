@@ -21,7 +21,11 @@ TARGET_SCREEN_WIDTH := 300
 TARGET_SCREEN_HEIGHT := 300
 
 # Dalvik heap
+ifeq ($(SNOWCASTLE_PARTITION_SCHEME),apfs)
+$(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
+else
 $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
+endif
 
 # Firmware
 PRODUCT_COPY_FILES += \
@@ -34,6 +38,7 @@ PRODUCT_PACKAGES += \
 # Init
 PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/fstab/fstab.$(SNOWCASTLE_PARTITION_SCHEME):$(TARGET_COPY_OUT_VENDOR)/etc/fstab.$(SNOWCASTLE_PARTITION_SCHEME) \
+    $(DEVICE_PATH)/configs/fstab/fstab.zram:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.zram \
     $(DEVICE_PATH)/configs/init/init.snowcastle.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.snowcastle.rc \
     $(DEVICE_PATH)/configs/init/ueventd.snowcastle.rc:$(TARGET_COPY_OUT_VENDOR)/etc/ueventd.snowcastle.rc
 
@@ -46,6 +51,7 @@ $(call soong_config_set,mainline_common_libinit,set_properties_from,devicetree)
 ifneq ($(SNOWCASTLE_PARTITION_SCHEME),normal)
 PRODUCT_PACKAGES += \
     generic_init_first_stage
+$(call soong_config_set_bool,mainline_common_libinit,set_dalvik_heap,false)
 endif
 
 # Images
