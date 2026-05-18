@@ -101,7 +101,7 @@ Here are the partitions that Android needs:
 This section is applicable only if you want Android being installed in an APFS volume.
 The Android firmware should be built with environment variable `SNOWCASTLE_PARTITION_SCHEME=apfs`.
 
-1. Create the directory for storing Android images: `/private/preboot/android`.
+1. Create the directory for storing Android images: `mkdir /private/preboot/android`.
 
 2. Exit the SSH shell: `exit`.
 
