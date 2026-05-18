@@ -76,9 +76,25 @@ BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD := \
     $(strip $(shell cat $(DEVICE_PATH)/configs/modprobe/modules.load.basic))
 BOARD_VENDOR_KERNEL_MODULES_LOAD := \
     $(BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD)
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD :=
+BOOT_KERNEL_MODULES :=
 RECOVERY_KERNEL_MODULES := \
     $(BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD)
 TARGET_AUTO_COLLECT_KERNEL_MODULE_DEPS := true
+
+ifeq ($(SNOWCASTLE_PARTITION_SCHEME),apfs)
+BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD += \
+    $(strip $(shell cat $(DEVICE_PATH)/configs/modprobe/modules.load.apfs))
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD += \
+    $(strip $(shell cat $(DEVICE_PATH)/configs/modprobe/modules.load.apfs))
+BOOT_KERNEL_MODULES += \
+    $(strip $(shell cat $(DEVICE_PATH)/configs/modprobe/modules.load.apfs))
+RECOVERY_KERNEL_MODULES += \
+    $(strip $(shell cat $(DEVICE_PATH)/configs/modprobe/modules.load.apfs))
+
+TARGET_KERNEL_EXT_MODULE_ROOT := $(TARGET_KERNEL_SOURCE)-modules
+TARGET_KERNEL_EXT_MODULES := linux-apfs-rw
+endif
 
 # OTA
 ifneq ($(SNOWCASTLE_PARTITION_SCHEME),normal)
