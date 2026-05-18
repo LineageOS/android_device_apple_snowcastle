@@ -21,7 +21,11 @@ TARGET_SCREEN_WIDTH := 300
 TARGET_SCREEN_HEIGHT := 300
 
 # Dalvik heap
+ifeq ($(SNOWCASTLE_PARTITION_SCHEME),apfs)
+$(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
+else
 $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
+endif
 
 # Firmware
 PRODUCT_COPY_FILES += \
@@ -37,7 +41,8 @@ PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/init/ueventd.snowcastle.rc:$(TARGET_COPY_OUT_VENDOR)/etc/ueventd.snowcastle.rc
 
 PRODUCT_PACKAGES += \
-    use_memfd.rc
+    use_memfd.rc \
+    zram.rc
 
 $(call soong_config_set,libinit,vendor_init_lib,//$(DEVICE_PATH):init_snowcastle)
 $(call soong_config_set,mainline_common_libinit,set_properties_from,devicetree)
@@ -48,6 +53,7 @@ PRODUCT_COPY_FILES += \
 else
 PRODUCT_PACKAGES += \
     generic_init_first_stage
+$(call soong_config_set_bool,mainline_common_libinit,set_dalvik_heap,false)
 endif
 
 # Images
@@ -72,6 +78,12 @@ PRODUCT_NO_BIONIC_PAGE_SIZE_MACRO := true
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/handheld_core_hardware.xml
+
+# Properties
+ifeq ($(SNOWCASTLE_PARTITION_SCHEME),apfs)
+PRODUCT_VENDOR_PROPERTIES += \
+    persist.sys.zram_enabled=1
+endif
 
 # Ramdisk
 ifeq ($(SNOWCASTLE_PARTITION_SCHEME),normal)
