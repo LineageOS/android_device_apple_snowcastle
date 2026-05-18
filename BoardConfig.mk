@@ -30,8 +30,10 @@ BOARD_KERNEL_CMDLINE := \
 
 ifeq ($(SNOWCASTLE_PARTITION_SCHEME),apfs)
 BOARD_KERNEL_CMDLINE += \
-    androidboot.partition_map=nvme0n1p1,base \
-    androidboot.use_tmpfs_userdata=1
+    androidboot.init_fatal_pause=true \
+    androidboot.mount_system=imgs \
+    androidboot.mount_userdata=tmpfs \
+    rdinit=/system/bin/generic_init
 endif
 
 # Display
@@ -79,7 +81,7 @@ RECOVERY_KERNEL_MODULES := \
 TARGET_AUTO_COLLECT_KERNEL_MODULE_DEPS := true
 
 # OTA
-ifeq ($(SNOWCASTLE_PARTITION_SCHEME),apfs)
+ifneq ($(SNOWCASTLE_PARTITION_SCHEME),normal)
 TARGET_SKIP_OTA_PACKAGE := true
 endif
 
@@ -100,7 +102,7 @@ TARGET_BOARD_PLATFORM := snowcastle
 
 # Recovery
 TARGET_RECOVERY_DENSITY := xxhdpi
-TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/configs/fstab/fstab.$(SNOWCASTLE_PARTITION_SCHEME)
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/configs/fstab/fstab.normal
 
 # VINTF
 DEVICE_MANIFEST_FILE := \
