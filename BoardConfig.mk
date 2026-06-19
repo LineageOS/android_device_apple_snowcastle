@@ -91,7 +91,8 @@ RECOVERY_KERNEL_MODULES := \
     $(BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD)
 TARGET_AUTO_COLLECT_KERNEL_MODULE_DEPS := true
 
-ifeq ($(shell grep modules_install $(TARGET_KERNEL_SOURCE)-modules/linux-apfs-rw/Makefile),)
+TARGET_KERNEL_EXT_MODULE_ROOT := kernel/modules
+ifeq ($(shell grep modules_install $(TARGET_KERNEL_EXT_MODULE_ROOT)/linux-apfs-rw/Makefile),)
     ifeq ($(SNOWCASTLE_PARTITION_SCHEME),apfs)
         $(error Please clone linux-apfs-rw and adapt it to be buildable.)
     endif
@@ -100,7 +101,6 @@ else
     BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD += apfs.ko
     BOOT_KERNEL_MODULES += apfs.ko
     RECOVERY_KERNEL_MODULES += apfs.ko
-    TARGET_KERNEL_EXT_MODULE_ROOT := $(TARGET_KERNEL_SOURCE)-modules
     TARGET_KERNEL_EXT_MODULES := linux-apfs-rw
 endif
 
