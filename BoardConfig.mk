@@ -38,7 +38,8 @@ ifneq ($(SNOWCASTLE_PARTITION_SCHEME),normal)
 BOARD_KERNEL_CMDLINE_BOOT += \
     androidboot.init_fatal_pause=true \
     androidboot.mount_firmware=false \
-    rdinit=/system/bin/generic_init
+    rdinit=/system/bin/generic_init \
+    sysctl.kernel.firmware_config.force_sysfs_fallback=1
 endif
 
 ifeq ($(SNOWCASTLE_PARTITION_SCHEME),apfs)
