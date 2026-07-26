@@ -27,8 +27,9 @@ Here we use LineageOS as example, and assuming you have already synced the platf
 2. Choose the `snowcastle` target: `breakfast snowcastle`.
 
 3. Clone the kernel repository: `mkdir -p kernel/apple && git clone https://github.com/HoolockLinux/linux kernel/apple/HoolockLinux`.
+If this has already been done previously, skip this step.
 
-4. Apply the needed kernel patches according to the table above.
+4. Apply the needed kernel patches according to the table above. If this has already been done previously, skip this step.
 
 5. Select a partition scheme to use.
 
