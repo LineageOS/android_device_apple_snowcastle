@@ -18,6 +18,12 @@ We have no way to tether boot Android yet.
 
 2. Extract firmwares from the iOS kernel using [hKernelFWExtractor](https://github.com/HoolockLinux/hKernelFWExtractor).
 
+3. Follow [this](https://github.com/Pauli1Go/HoolockLinux-linux-firmware) for touchscreen firmwares for iPad 7.
+
+### Build m1n1
+
+https://github.com/Pauli1Go/m1n1-ipad7
+
 ### Build Android
 
 Here we use LineageOS as example, and assuming you have already synced the platform source code.
@@ -26,7 +32,7 @@ Here we use LineageOS as example, and assuming you have already synced the platf
 
 2. Choose the `snowcastle` target: `breakfast snowcastle`.
 
-3. Clone the kernel repository: `mkdir -p kernel/apple && git clone https://github.com/HoolockLinux/linux kernel/apple/HoolockLinux`.
+3. Clone the kernel repository: `mkdir -p kernel/apple && git clone https://github.com/Pauli1Go/HoolockLinux-ipad7 kernel/apple/HoolockLinux`.
 If this has already been done previously, skip this step.
 
 4. Apply the needed kernel patches according to the table above. If this has already been done previously, skip this step.
@@ -42,7 +48,7 @@ Execute this to select the wanted partition scheme: `export SNOWCASTLE_PARTITION
 
 7. Specify the full path to extracted latest LLVM toolchain. For example: `export TARGET_KERNEL_CLANG_PATH=~/Downloads/LLVM-22.1.0-Linux-X64`.
 
-8. Put the extracted firmwares into `device/apple/snowcastle/prebuilts/firmware` directory.
+8. Put the extracted firmwares into `device/apple/snowcastle/prebuilts/firmware(/apple)?` directory.
 
 9. If you have selected APFS partition scheme, do the following to obtain and adapt the necessary `linux-apfs-rw` module:
 
@@ -55,7 +61,9 @@ If this has already been done previously, skip this step.
 
 10. If kernel version is v7.2+, execute this to apply a necessary patch: `repopick 494663`.
 
-11. Start the build: `m m1n1-{boot,recovery} systemimage vendorimage`.
+11. Put the built `m1n1.bin` to `device/apple/snowcastle/prebuilts/m1n1.bin`.
+
+12. Start the build: `m m1n1-{boot,recovery} systemimage vendorimage`.
 
 ### Jailbreak and enter device shell
 
