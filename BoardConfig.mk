@@ -70,6 +70,7 @@ TARGET_KERNEL_SOURCE := kernel/apple/HoolockLinux
 TARGET_KERNEL_CONFIG_EXT := \
     $(DEVICE_PATH)/configs/kernel/config-postmarketos-apple-4k.aarch64 \
     $(DEVICE_PATH)/configs/kernel/apple.config \
+    $(DEVICE_PATH)/configs/kernel/Pauli1Go-addons.config \
     kernel/mainline/configs/fragments/android-base-pre/common.config \
     kernel/mainline/configs/fragments/android-base-pre/arm64.config \
     kernel/configs/b/android-6.12/android-base.config \
