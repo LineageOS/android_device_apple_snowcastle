@@ -77,6 +77,7 @@ PRODUCT_COPY_FILES += \
 
 # Ramdisk
 PRODUCT_COPY_FILES += \
+    $(call find-copy-subdir-files,*,$(DEVICE_PATH)/prebuilts/firmware/,$(TARGET_COPY_OUT_RAMDISK)/vendor/firmware/) \
     $(DEVICE_PATH)/configs/fstab/fstab.$(SNOWCASTLE_PARTITION_SCHEME):$(TARGET_COPY_OUT_RAMDISK)/fstab.$(SNOWCASTLE_PARTITION_SCHEME)
 
 # Recovery
