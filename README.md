@@ -3,11 +3,19 @@
 Currently, we only support devices with internal storage support.
 We have no way to tether boot Android yet.
 
+## Kernel edits
+
+- After applying kernel patches specified below, on `mm/Kconfig`, on config option `MEMFD_ASHMEM_SHIM`, remove the dependency on `ASHMEM_C`.
+
 ## Kernel patches
+
+For recent Linux kernel versions:
 
 | Commit name | Purpose | Source |
 |-------------|---------|--------|
 | `ANDROID: usb: gadget: configfs: Add Uevent to notify userspace` | Fixes USB in normal mode | https://android.googlesource.com/kernel/common-patches/+/refs/heads/main-kernel/android-mainline/ANDROID-usb-gadget-configfs-Add-Uevent-to-notify-userspace.patch |
+| `ANDROID: mm/memfd-ashmem-shim: Introduce shim layer` | Fixes graphics output via framebuffer | https://android.googlesource.com/kernel/common-patches/+/refs/heads/main-kernel/android-mainline/ANDROID-mm-memfd-ashmem-shim-Introduce-shim-layer.patch |
+| `ANDROID: mm: shmem: Use memfd-ashmem-shim ioctl handler"` | Fixes graphics output via framebuffer | https://android.googlesource.com/kernel/common-patches/+/refs/heads/main-kernel/android-mainline/ANDROID-mm-shmem-Use-memfd-ashmem-shim-ioctl-handler.patch |
 | `HACK: selinux: Force permissive when androidboot.selinux=permissive` | Guess :P | https://github.com/LineageOS/android_kernel_virt_virtio/commit/a723c1431987aec6e44f5ef20c9424a95727adf8 |
 
 ## How-to
@@ -29,7 +37,7 @@ Here we use LineageOS as example, and assuming you have already synced the platf
 3. Clone the kernel repository: `mkdir -p kernel/apple && git clone https://github.com/HoolockLinux/linux kernel/apple/HoolockLinux`.
 If this has already been done previously, skip this step.
 
-4. Apply the needed kernel patches according to the table above. If this has already been done previously, skip this step.
+4. Apply the needed kernel patches and kernel edits according to the table above. If this has already been done previously, skip this step.
 
 5. Select a partition scheme to use.
 
