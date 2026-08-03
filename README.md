@@ -54,7 +54,7 @@ Execute this to select the wanted partition scheme: `export SNOWCASTLE_PARTITION
 
 7. Specify the full path to extracted latest LLVM toolchain. For example: `export TARGET_KERNEL_CLANG_PATH=~/Downloads/LLVM-22.1.0-Linux-X64`.
 
-8. Put the extracted firmwares into `device/apple/snowcastle/prebuilts/firmware` directory.
+8. Put the extracted firmwares into `device/apple/snowcastle/prebuilts/firmware(/apple)?` directory.
 
 9. If you have selected APFS partition scheme, do the following to obtain and adapt the necessary `linux-apfs-rw` module:
 
