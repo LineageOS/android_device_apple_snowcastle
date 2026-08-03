@@ -1,4 +1,4 @@
-# Android device tree for "snowcastle"
+# Android device tree for Project Snowcastle
 
 Currently, we only support devices with internal storage support.
 We have no way to tether boot Android yet.
