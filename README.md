@@ -26,6 +26,10 @@ For recent Linux kernel versions:
 
 2. Extract firmwares from the iOS kernel using [hKernelFWExtractor](https://github.com/HoolockLinux/hKernelFWExtractor).
 
+### Build m1n1
+
+Please check out HoolockLinux's m1n1 repository [here](https://github.com/HoolockLinux/m1n1).
+
 ### Build Android
 
 Here we use LineageOS as example, and assuming you have already synced the platform source code.
@@ -63,7 +67,9 @@ If this has already been done previously, skip this step.
 
 10. If kernel version is v7.2+, execute this to apply a necessary patch: `repopick 494663`.
 
-11. Start the build: `m m1n1-{boot,recovery} systemimage vendorimage`.
+11. Put the built `m1n1.bin` to `device/apple/snowcastle/prebuilts/m1n1.bin`.
+
+12. Start the build: `m m1n1-{boot,recovery} systemimage vendorimage`.
 
 ### Jailbreak and enter device shell
 
