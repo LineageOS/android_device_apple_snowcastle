@@ -17,11 +17,18 @@ include device/mainline/common/optional/options.mk
 $(call inherit-product, device/mainline/common/mainline_common.mk)
 
 # Bootanimation
+ifeq ($(PRODUCT_IS_GO),true)
+TARGET_SCREEN_WIDTH := 100
+TARGET_SCREEN_HEIGHT := 100
+else
 TARGET_SCREEN_WIDTH := 300
 TARGET_SCREEN_HEIGHT := 300
+endif
 
 # Dalvik heap
-ifeq ($(SNOWCASTLE_PARTITION_SCHEME),apfs)
+ifeq ($(PRODUCT_IS_GO),true)
+$(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
+else ifeq ($(SNOWCASTLE_PARTITION_SCHEME),apfs)
 $(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
 else
 $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
