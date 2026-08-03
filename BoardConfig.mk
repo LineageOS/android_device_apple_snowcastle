@@ -131,6 +131,9 @@ endif
 # Platform
 TARGET_BOARD_PLATFORM := snowcastle
 
+# Properties
+TARGET_PRODUCT_PROP += $(DEVICE_PATH)/configs/properties/product.prop
+
 # Recovery
 TARGET_RECOVERY_DENSITY := xxhdpi
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/configs/fstab/fstab.normal
