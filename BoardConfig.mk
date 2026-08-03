@@ -5,9 +5,6 @@
 
 USES_DEVICE_APPLE_SNOWCASTLE := true
 
-# Kernel
-TARGET_BOOTS_16K := true
-
 # Inherit from mainline/common
 include device/mainline/common/BoardConfigMainlineCommon.mk
 
@@ -51,7 +48,11 @@ BOARD_KERNEL_CMDLINE_BOOT += \
 endif
 
 # Display
+ifeq ($(TARGET_DEVICE),snowcastle_legacy)
+TARGET_SCREEN_DENSITY := 300
+else
 TARGET_SCREEN_DENSITY := 400
+endif
 
 # Filesystem
 TARGET_USERIMAGES_SPARSE_EXT_DISABLED := true
@@ -76,11 +77,15 @@ TARGET_KERNEL_CONFIG_EXT := \
     kernel/configs/b/android-6.12/android-base.config \
     kernel/mainline/configs/fragments/android-base-conditional/CONFIG_ARM64-y.config \
     kernel/mainline/configs/fragments/common.config \
-    kernel/mainline/configs/fragments/y/arm64/pagesize-16k.config \
     kernel/mainline/configs/fragments/y/fbcon.config \
     kernel/mainline/configs/fragments/n/disable-clang-hardening-features.config \
     kernel/mainline/configs/fragments/n/disable-rust.config \
     kernel/mainline/configs/fragments/n/faster-build-time.config
+
+ifeq ($(TARGET_BOOTS_16K),true)
+TARGET_KERNEL_CONFIG_EXT += \
+    kernel/mainline/configs/fragments/y/arm64/pagesize-16k.config
+endif
 endif
 
 # Kernel modules
