@@ -87,6 +87,15 @@ If this has already been done previously, skip this step.
 
 12. Start the build: `m m1n1-{boot,recovery} systemimage vendorimage`.
 
+13. If you're using Pauli1Go's HoolockLinux fork and you want more hardware features to function on the compatible devices:
+
+    1. Do [this](https://github.com/Pauli1Go/HoolockLinux-linux-firmware/blob/main/iphone7.md#9-prepare-private-syscfg-for-the-d111-capable-m1n1-loader) for iPhone 7,
+    or [this](https://github.com/Pauli1Go/HoolockLinux-linux-firmware/blob/main/ipad7.md#10-provide-syscfg-to-the-patched-m1n1-loader) for iPad 7.
+    2. Put the generated `m1n1-syscfg.payload` file into `device/apple/snowcastle/prebuilts/` directory
+    3. Start the build again.
+
+**IMPORTANT NOTE: The m1n1 blob built after this step is usable ONLY on the device where SysCfg is taken from. Using it on other devices may cause unpredictable bad behavior.**
+
 ### Jailbreak and enter device shell
 
 1. Jailbreak the device with [palera1n](https://docs.website-msw.pages.dev/docs/intro/). At the post install stage, install Sileo.
