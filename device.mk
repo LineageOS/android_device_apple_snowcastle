@@ -64,6 +64,10 @@ PRODUCT_USE_DYNAMIC_PARTITION_SIZE := true
 # Kernel
 PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
 
+# Kernel modules
+PRODUCT_PACKAGES += \
+    modprobe_kernel
+
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
     $(DEVICE_PATH)/overlays/overlay
