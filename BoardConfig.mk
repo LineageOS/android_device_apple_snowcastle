@@ -86,6 +86,10 @@ endif
 # Kernel modules
 BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD := \
     $(strip $(shell cat $(DEVICE_PATH)/configs/modprobe/modules.load.basic))
+ifneq ($(wildcard $(TARGET_KERNEL_SOURCE)/drivers/dma/apple-sio-dma.c),)
+BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD += \
+    $(strip $(shell cat $(DEVICE_PATH)/configs/modprobe/modules.load.touchscreen))
+endif
 BOARD_VENDOR_KERNEL_MODULES_LOAD := \
     $(BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD)
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD :=
