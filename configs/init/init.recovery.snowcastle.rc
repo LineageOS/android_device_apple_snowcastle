@@ -2,3 +2,8 @@
 # SPDX-FileCopyrightText: The LineageOS Project
 # SPDX-License-Identifier: Apache-2.0
 #
+
+# Display
+on property:init.svc.recovery=running
+    write /sys/class/vtconsole/vtcon0/bind 0
+    write /sys/class/vtconsole/vtcon1/bind 0
