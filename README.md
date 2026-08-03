@@ -87,6 +87,11 @@ If this has already been done previously, skip this step.
 
 12. Start the build: `m m1n1-{boot,recovery} systemimage vendorimage`.
 
+13. If you're using Pauli1Go's HoolockLinux fork and you want more hardware features to function, do
+[this](https://github.com/Pauli1Go/HoolockLinux-linux-firmware/blob/main/iphone7.md#9-prepare-private-syscfg-for-the-d111-capable-m1n1-loader),
+and then specify the path to the generated `m1n1-syscfg.payload` file: `export TARGET_M1N1_SYSCFG_PAYLOAD=<path to the file>`,
+finally start the build again.
+
 ### Jailbreak and enter device shell
 
 1. Jailbreak the device with [palera1n](https://docs.website-msw.pages.dev/docs/intro/). At the post install stage, install Sileo.
