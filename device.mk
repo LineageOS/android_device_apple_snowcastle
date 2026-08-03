@@ -68,6 +68,9 @@ PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
 DEVICE_PACKAGE_OVERLAYS += \
     $(DEVICE_PATH)/overlays/overlay
 
+PRODUCT_PACKAGES += \
+    MainlineGenericWifiOverlay
+
 # Page size
 PRODUCT_CHECK_PREBUILT_MAX_PAGE_SIZE := true
 
