@@ -14,6 +14,11 @@ on property:sys.bootstat.first_boot_completed=1
 on early-init
     trigger firmware_mounts_complete
 
+# Kernel modules
+on init
+    # Undo the override from system init.rc
+    write /proc/sys/kernel/modprobe /vendor/bin/modprobe_kernel
+
 # Mount
 on fs
     # Mount everything that does not require fsck

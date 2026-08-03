@@ -31,7 +31,9 @@ BOARD_KERNEL_CMDLINE := \
     androidboot.verifiedbootstate=orange \
     console=tty0
 
-BOARD_KERNEL_CMDLINE_BOOT :=
+BOARD_KERNEL_CMDLINE_BOOT := \
+    sysctl.kernel.modprobe=/vendor/bin/modprobe_kernel
+
 BOARD_KERNEL_CMDLINE_RECOVERY :=
 
 ifneq ($(SNOWCASTLE_PARTITION_SCHEME),normal)
