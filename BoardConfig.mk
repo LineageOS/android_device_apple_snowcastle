@@ -85,7 +85,8 @@ endif
 
 # Kernel modules
 BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD := \
-    $(strip $(shell cat $(DEVICE_PATH)/configs/modprobe/modules.load.basic))
+    $(strip $(shell cat $(DEVICE_PATH)/configs/modprobe/modules.load.basic)) \
+    $(strip $(shell cat $(DEVICE_PATH)/configs/modprobe/modules.load.touchscreen))
 BOARD_VENDOR_KERNEL_MODULES_LOAD := \
     $(BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD)
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD :=
