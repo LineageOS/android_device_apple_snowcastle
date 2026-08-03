@@ -1,7 +1,19 @@
 # Android device tree for Project Snowcastle
 
+This is based on the HoolockLinux project, or its derivated projects.
+
 Currently, we only support devices with internal storage support.
 We have no way to tether boot Android yet.
+
+## Available HoolockLinux derivations
+
+- Pauli1Go: Provides touchscreen & Wi-Fi & Bluetooth & charging support for iPhone 7 series and iPad 7.
+Due to the fact that the effort involves assistance from AI, the HoolockLinux developers does not accept contribution with it.
+
+| Name | Homepage | Kernel URL | m1n1 URL |
+|------|----------|------------|----------|
+| Original | https://github.com/HoolockLinux | https://github.com/HoolockLinux/linux | https://github.com/HoolockLinux/m1n1 |
+| Pauli1Go | https://github.com/Pauli1Go?tab=repositories | https://github.com/Pauli1Go/HoolockLinux | https://github.com/Pauli1Go/m1n1 |
 
 ## Kernel edits
 
@@ -20,15 +32,19 @@ For recent Linux kernel versions:
 
 ## How-to
 
-### Obtain firmwares
+### Obtain firmwares via hKernelFWExtractor
 
 1. Obtain iOS kernel using blacktop's [tool](https://github.com/blacktop/ipsw), for example: `ipsw download ipsw --device iPhone10,1 --build 20H380 --kernel`
 
 2. Extract firmwares from the iOS kernel using [hKernelFWExtractor](https://github.com/HoolockLinux/hKernelFWExtractor).
 
+### Obtain firmwares that are specific to Pauli1Go's HoolockLinux fork
+
+Follow the documentation [here](https://github.com/Pauli1Go/HoolockLinux-linux-firmware).
+
 ### Build m1n1
 
-Please check out HoolockLinux's m1n1 repository [here](https://github.com/HoolockLinux/m1n1).
+Please check out the README file in the m1n1 repository.
 
 ### Build Android
 
@@ -38,7 +54,7 @@ Here we use LineageOS as example, and assuming you have already synced the platf
 
 2. Choose the `snowcastle` target: `breakfast snowcastle`.
 
-3. Clone the kernel repository: `mkdir -p kernel/apple && git clone https://github.com/HoolockLinux/linux kernel/apple/HoolockLinux`.
+3. Clone the kernel repository: `mkdir -p kernel/apple && git clone <URL of the kernel repository> kernel/apple/HoolockLinux`.
 If this has already been done previously, skip this step.
 
 4. Apply the needed kernel patches and kernel edits according to the table above. If this has already been done previously, skip this step.
