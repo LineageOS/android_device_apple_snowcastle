@@ -10,6 +10,10 @@ on property:sys.bootstat.first_boot_completed=1
     write /sys/class/vtconsole/vtcon0/bind 0
     write /sys/class/vtconsole/vtcon1/bind 0
 
+# Firmware
+on early-init
+    trigger firmware_mounts_complete
+
 # Mount
 on fs
     # Mount everything that does not require fsck
