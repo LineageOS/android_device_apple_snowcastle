@@ -68,6 +68,9 @@ PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
 DEVICE_PACKAGE_OVERLAYS += \
     $(DEVICE_PATH)/overlays/overlay
 
+PRODUCT_PACKAGES += \
+    MainlineGenericWifiOverlay
+
 # Page size
 PRODUCT_CHECK_PREBUILT_MAX_PAGE_SIZE := true
 
@@ -92,9 +95,5 @@ PRODUCT_SHIPPING_API_LEVEL := 33
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(DEVICE_PATH) \
+    device/mainline/generic \
     kernel/mainline/configs
-
-ifneq ($(SNOWCASTLE_PARTITION_SCHEME),normal)
-PRODUCT_SOONG_NAMESPACES += \
-    device/mainline/generic
-endif
