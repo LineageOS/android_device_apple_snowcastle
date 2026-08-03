@@ -132,6 +132,10 @@ endif
 # Platform
 TARGET_BOARD_PLATFORM := snowcastle
 
+# Properties
+TARGET_VENDOR_PROP += \
+    device/mainline/generic/configs/properties/vendor_bluetooth_profiles.prop
+
 # Recovery
 TARGET_RECOVERY_DENSITY := xxhdpi
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/configs/fstab/fstab.normal
