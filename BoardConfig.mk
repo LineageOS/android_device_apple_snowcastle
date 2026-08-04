@@ -76,7 +76,8 @@ TARGET_KERNEL_CONFIG_EXT := \
     kernel/mainline/configs/fragments/y/fbcon.config \
     kernel/mainline/configs/fragments/n/disable-clang-hardening-features.config \
     kernel/mainline/configs/fragments/n/disable-rust.config \
-    kernel/mainline/configs/fragments/n/faster-build-time.config
+    kernel/mainline/configs/fragments/n/faster-build-time.config \
+    $(DEVICE_PATH)/configs/kernel/customizations.config
 
 ifeq ($(TARGET_BOOTS_16K),true)
 TARGET_KERNEL_CONFIG_EXT += \
