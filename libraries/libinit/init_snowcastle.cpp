@@ -17,6 +17,7 @@ static constexpr char kDtBasePath[] = "/sys/firmware/devicetree/base/";
 
 static const std::unordered_map<std::string, std::string> kDtPathToPropertyMap = {
         {"chosen/asahi,iboot2-version", "ro.bootloader"},
+        {"smbios/smbios/baseboard/product", "ro.boot.hardware.revision"},
         {"smbios/smbios/system/serial", "ro.serialno"},
 };
 
