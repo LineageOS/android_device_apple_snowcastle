@@ -68,6 +68,7 @@ TARGET_KERNEL_CONFIG_EXT := \
     $(DEVICE_PATH)/configs/kernel/apple.config \
     $(DEVICE_PATH)/configs/kernel/staging.config \
     $(DEVICE_PATH)/configs/kernel/Pauli1Go-additions.config \
+    $(DEVICE_PATH)/configs/kernel/customizations.config \
     kernel/mainline/configs/fragments/android-base-pre/common.config \
     kernel/mainline/configs/fragments/android-base-pre/arm64.config \
     kernel/configs/b/android-6.12/android-base.config \
