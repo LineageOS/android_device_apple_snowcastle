@@ -36,7 +36,7 @@ For recent Linux kernel versions:
 
 ### Obtain firmwares via hKernelFWExtractor
 
-1. Obtain iOS kernel using blacktop's [tool](https://github.com/blacktop/ipsw), for example: `ipsw download ipsw --device iPhone10,1 --build 20H380 --kernel`
+1. Obtain iOS kernel using blacktop's [ipsw](https://github.com/blacktop/ipsw) tool, for example: `ipsw download ipsw --device iPhone10,1 --build 20H380 --kernel`
 
 2. Extract firmwares from the iOS kernel using [hKernelFWExtractor](https://github.com/HoolockLinux/hKernelFWExtractor).
 
@@ -51,10 +51,11 @@ Please check out the README file in the m1n1 repository.
 ### Build Android
 
 Here we use LineageOS as example, and assuming you have already synced the platform source code.
+These instructions are NOT guaranteed to work for any other Android distributions.
 
 1. Setup the build environment: `source build/envsetup.sh`.
 
-2. Choose the `snowcastle` target: `breakfast snowcastle`.
+2. Select the `snowcastle` target device: `breakfast snowcastle`.
 
 3. Clone the kernel repository: `mkdir -p kernel/apple && git clone <URL of the kernel repository> kernel/apple/HoolockLinux`.
 If this has already been done previously, skip this step.
@@ -63,8 +64,8 @@ If this has already been done previously, skip this step.
 
 5. Select a partition scheme to use.
 
-- "apfs": Android will be loaded from partition images stored in APFS volume. Userdata would be stored in RAM, due to the existing APFS support on Linux not being capable of writing yet.
-- "normal": Android will be loaded from normal partitions on the disk. This requires resizing APFS volume and modifying the partition table on the disk.
+- `apfs`: Android will be loaded from partition images stored in an APFS volume. Userdata would be stored in RAM, due to the existing APFS support on Linux is not capable of writing yet.
+- `normal`: Android will be loaded from normal partitions on the disk. This requires resizing APFS volume and modifying the partition table on the disk.
 
 Execute this to select the wanted partition scheme: `export SNOWCASTLE_PARTITION_SCHEME=<wanted partition scheme>`
 
@@ -112,17 +113,17 @@ If this has already been done previously, skip this step.
 
 ### Preparations for normal partition scheme
 
-This section is applicable only if you want Android being installed on normal partitions.
-The Android firmware should be built with environment variable `SNOWCASTLE_PARTITION_SCHEME=normal`.
+This section is applicable only if you want Android to be installed on normal partitions.
+The Android images should be built with environment variable `SNOWCASTLE_PARTITION_SCHEME=normal`.
 
 #### Partitioning for normal partition scheme
 
-Here are the partitions that Android needs:
+Here are the partitions that Android requires:
 
 |   Name   | Minimum size |
 |----------|--------------|
 | system   | 3 GiB        |
-| vendor   | 512 MiB      |
+| vendor   | 256 MiB      |
 | metadata | 16 MiB       |
 | userdata | 2 GiB        |
 
@@ -142,8 +143,8 @@ Here are the partitions that Android needs:
 
 ### Preparation and Flashing for APFS partition scheme
 
-This section is applicable only if you want Android being installed in an APFS volume.
-The Android firmware should be built with environment variable `SNOWCASTLE_PARTITION_SCHEME=apfs`.
+This section is applicable only if you want Android to be installed in an APFS volume.
+The Android images should be built with environment variable `SNOWCASTLE_PARTITION_SCHEME=apfs`.
 
 1. Create the directory for storing Android images: `mkdir /private/preboot/android`.
 
