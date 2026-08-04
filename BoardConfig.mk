@@ -60,11 +60,6 @@ TARGET_USERIMAGES_USE_F2FS := true
 TARGET_USERIMAGES_USE_EXT4 := true
 
 # Kernel
-ifneq ($(wildcard device/apple/snowcastle-kernel/Image.gz-dtb),)
-$(warning Using prebuilt kernel)
-TARGET_PREBUILT_KERNEL := device/apple/snowcastle-kernel/Image.gz-dtb
-else
-$(warning Using source-built kernel)
 BOARD_KERNEL_IMAGE_NAME := Image.gz
 TARGET_KERNEL_SOURCE := kernel/apple/HoolockLinux
 
@@ -86,7 +81,6 @@ TARGET_KERNEL_CONFIG_EXT := \
 ifeq ($(TARGET_BOOTS_16K),true)
 TARGET_KERNEL_CONFIG_EXT += \
     kernel/mainline/configs/fragments/y/arm64/pagesize-16k.config
-endif
 endif
 
 # Kernel modules
