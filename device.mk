@@ -16,6 +16,9 @@ TARGET_USES_FRAMEBUFFER_DISPLAY := true
 include device/mainline/common/optional/options.mk
 $(call inherit-product, device/mainline/common/mainline_common.mk)
 
+# APEX
+OVERRIDE_PRODUCT_COMPRESSED_APEX := false
+
 # Bootanimation
 ifeq ($(PRODUCT_IS_GO),true)
 TARGET_SCREEN_WIDTH := 100
