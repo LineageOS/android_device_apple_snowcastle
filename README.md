@@ -89,6 +89,7 @@ If this has already been done previously, skip this step.
 11. Put the built `m1n1.bin` to `device/apple/snowcastle/prebuilts/m1n1.bin`.
 
 12. Start the build: `m m1n1-{boot,recovery} systemimage vendorimage`.
+For APFS partition scheme, append ` vendor_dlkmimage` to the end of the command.
 
 13. If you're using Pauli1Go's HoolockLinux fork and you want more hardware features to function on the compatible devices:
 
@@ -150,7 +151,7 @@ The Android images should be built with environment variable `SNOWCASTLE_PARTITI
 
 2. Exit the SSH shell: `exit`.
 
-3. Copy the Android images to the device: `scp system.img vendor.img root@<Device IP address>:/private/preboot/android/`.
+3. Copy the Android images to the device: `scp system.img vendor.img vendor_dlkm.img root@<Device IP address>:/private/preboot/android/`.
 
 ### Boot Android
 
