@@ -5,6 +5,8 @@ This is based on the HoolockLinux project, or its derivated projects.
 Currently, we only support devices with internal storage support.
 We have no way to tether boot Android yet.
 
+**WARNING: Do NOT distribute builds with any Apple components included, such as the firmware files! Doing so violates Apple's EULA.**
+
 ## Available HoolockLinux derivations
 
 - Pauli1Go: Provides touchscreen & Wi-Fi & Bluetooth & charging support for iPhone 7 series and iPad 7.
