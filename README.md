@@ -31,6 +31,7 @@ For recent Linux kernel versions:
 | `ANDROID: mm/memfd-ashmem-shim: Introduce shim layer` | Fixes graphics output via framebuffer | https://android.googlesource.com/kernel/common-patches/+/refs/heads/main-kernel/android-mainline/ANDROID-mm-memfd-ashmem-shim-Introduce-shim-layer.patch |
 | `ANDROID: mm: shmem: Use memfd-ashmem-shim ioctl handler"` | Fixes graphics output via framebuffer | https://android.googlesource.com/kernel/common-patches/+/refs/heads/main-kernel/android-mainline/ANDROID-mm-shmem-Use-memfd-ashmem-shim-ioctl-handler.patch |
 | `HACK: selinux: Force permissive when androidboot.selinux=permissive` | Guess :P | https://github.com/LineageOS/android_kernel_virt_virtio/commit/a723c1431987aec6e44f5ef20c9424a95727adf8 |
+| `HACK: brcmfmac: Disable NL80211_EXT_FEATURE_4WAY_HANDSHAKE_STA_PSK` | Fixes Wi-Fi authentication | [Patch file](.kernel-patches/0001-HACK-brcmfmac-Disable-NL80211_EXT_FEATURE_4WAY_HANDS.patch) |
 
 ## How-to
 

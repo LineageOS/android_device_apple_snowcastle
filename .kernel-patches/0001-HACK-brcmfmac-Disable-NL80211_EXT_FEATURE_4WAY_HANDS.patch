@@ -1,0 +1,29 @@
+From 3f0cefe283766ab677ca26a844766705b15b6126 Mon Sep 17 00:00:00 2001
+From: Yumi Yukimura <me.cafebabe@gmail.com>
+Date: Wed, 5 Aug 2026 13:09:47 +0800
+Subject: [PATCH] HACK: brcmfmac: Disable
+ NL80211_EXT_FEATURE_4WAY_HANDSHAKE_STA_PSK
+
+https://lists.infradead.org/pipermail/hostap/2024-August/042893.html
+---
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
+index 0b55d445895f2..598c668e1378c 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
+@@ -7693,8 +7693,8 @@ static int brcmf_setup_wiphy(struct wiphy *wiphy, struct brcmf_if *ifp)
+ 	if (!ifp->drvr->settings->roamoff)
+ 		wiphy->flags |= WIPHY_FLAG_SUPPORTS_FW_ROAM;
+ 	if (brcmf_feat_is_enabled(ifp, BRCMF_FEAT_FWSUP)) {
+-		wiphy_ext_feature_set(wiphy,
+-				      NL80211_EXT_FEATURE_4WAY_HANDSHAKE_STA_PSK);
++//		wiphy_ext_feature_set(wiphy,
++//				      NL80211_EXT_FEATURE_4WAY_HANDSHAKE_STA_PSK);
+ 		wiphy_ext_feature_set(wiphy,
+ 				      NL80211_EXT_FEATURE_4WAY_HANDSHAKE_STA_1X);
+ 		if (brcmf_feat_is_enabled(ifp, BRCMF_FEAT_SAE))
+-- 
+2.47.3
+
