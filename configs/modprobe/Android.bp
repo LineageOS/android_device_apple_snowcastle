@@ -1,0 +1,11 @@
+//
+// SPDX-FileCopyrightText: The LineageOS Project
+// SPDX-License-Identifier: Apache-2.0
+//
+
+prebuilt_etc {
+    name: "modules.load.normal",
+    src: "modules.load.normal",
+    recovery_available: true,
+    vendor: true,
+}
