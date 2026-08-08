@@ -36,17 +36,18 @@ BOARD_KERNEL_CMDLINE_RECOVERY :=
 ifeq ($(SNOWCASTLE_USE_GENERIC_INIT),true)
 BOARD_KERNEL_CMDLINE += \
     androidboot.init_fatal_pause=true \
-    androidboot.mount_firmware=false \
     rdinit=/system/bin/generic_init \
     sysctl.kernel.firmware_config.force_sysfs_fallback=1
 endif
 
 ifeq ($(SNOWCASTLE_PARTITION_SCHEME),apfs)
 BOARD_KERNEL_CMDLINE += \
+    androidboot.mount_firmware=only_android_dir \
     androidboot.mount_system=imgs \
     androidboot.mount_userdata=tmpfs
 else ifeq ($(SNOWCASTLE_PARTITION_SCHEME),normal)
 BOARD_KERNEL_CMDLINE += \
+    androidboot.mount_firmware=false \
     androidboot.mount_system=std_parts \
     androidboot.mount_userdata=std_parts
 endif
