@@ -11,3 +11,7 @@ on property:init.svc.recovery=running
 # Firmware
 on early-init
     trigger firmware_mounts_complete
+
+# Kernel modules
+on early-boot
+    exec u:r:modprobe:s0 -- /system/bin/modprobe -s -d /system/lib/modules --all=/system/etc/modules.load.normal
