@@ -1,0 +1,4 @@
+blocklist apple-sio.ko
+blocklist apple-sio-dma.ko
+blocklist apple_z2.ko
+blocklist pmp_t8015_v1.ko
