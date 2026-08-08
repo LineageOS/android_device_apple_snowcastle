@@ -82,7 +82,8 @@ endif
 
 ifeq ($(SNOWCASTLE_USE_GENERIC_INIT),true)
 PRODUCT_PACKAGES += \
-    generic_init_first_stage
+    generic_init_first_stage \
+    generic_init_first_stage.recovery
 endif
 
 # Input
