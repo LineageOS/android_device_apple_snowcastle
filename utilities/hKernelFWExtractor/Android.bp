@@ -1,0 +1,22 @@
+cc_library {
+    name: "libplooshfinder",
+    srcs: ["hKernelFWExtractor/plooshfinder/src/**/*.c"],
+    export_include_dirs: ["hKernelFWExtractor/plooshfinder/include"],
+    local_include_dirs: ["hKernelFWExtractor/plooshfinder/include"],
+    host_supported: true,
+    recovery_available: true,
+    vendor: true,
+}
+
+cc_binary {
+    name: "hKernelFWExtractor",
+    srcs: [
+        "hKernelFWExtractor/patches/*.c",
+        "hKernelFWExtractor/src/*.c",
+    ],
+    local_include_dirs: ["hKernelFWExtractor/include"],
+    shared_libs: ["libplooshfinder"],
+    bootstrap: true,
+    recovery_available: true,
+    vendor: true,
+}

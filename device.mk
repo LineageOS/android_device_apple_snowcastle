@@ -46,6 +46,10 @@ endif
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,$(DEVICE_PATH)/prebuilts/firmware/,$(TARGET_COPY_OUT_VENDOR)/firmware/)
 
+PRODUCT_PACKAGES += \
+    hKernelFWExtractor \
+    hKernelFWExtractor.recovery
+
 # HIDL
 PRODUCT_PACKAGES += \
     vndservicemanager
