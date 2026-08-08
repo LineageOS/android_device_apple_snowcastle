@@ -53,6 +53,8 @@ PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,$(DEVICE_PATH)/prebuilts/firmware/,$(TARGET_COPY_OUT_VENDOR)/firmware/)
 
 PRODUCT_PACKAGES += \
+    generate_firmware \
+    generate_firmware.recovery \
     hKernelFWExtractor \
     hKernelFWExtractor.recovery \
     ipsw \
@@ -67,6 +69,7 @@ PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/fstab/fstab.$(SNOWCASTLE_PARTITION_SCHEME):$(TARGET_COPY_OUT_VENDOR)/etc/fstab.$(SNOWCASTLE_PARTITION_SCHEME) \
     $(DEVICE_PATH)/configs/fstab/fstab.zram:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.zram \
     $(DEVICE_PATH)/configs/init/init.snowcastle.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.snowcastle.rc \
+    $(DEVICE_PATH)/configs/init/ueventd.snowcastle.rc:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/etc/ueventd.rc \
     $(DEVICE_PATH)/configs/init/ueventd.snowcastle.rc:$(TARGET_COPY_OUT_VENDOR)/etc/ueventd.snowcastle.rc
 
 PRODUCT_PACKAGES += \
@@ -78,6 +81,13 @@ $(call soong_config_set,mainline_common_libinit,set_properties_from,devicetree)
 ifneq ($(SNOWCASTLE_PARTITION_SCHEME),normal)
 PRODUCT_PACKAGES += \
     generic_init_first_stage
+
+PRODUCT_PACKAGES += \
+    sh_vendor_bootstrap \
+    toybox_vendor_bootstrap \
+    vendor_init \
+    vendor_init_recovery
+
 $(call soong_config_set_bool,mainline_common_libinit,set_dalvik_heap,false)
 endif
 

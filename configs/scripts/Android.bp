@@ -1,0 +1,17 @@
+sh_binary {
+    name: "generate_firmware",
+    src: "generate_firmware",
+    recovery_available: true,
+}
+
+sh_binary {
+    name: "vendor_init",
+    src: "vendor_init",
+    vendor: true,
+}
+
+sh_binary {
+    name: "vendor_init_recovery",
+    src: "vendor_init_recovery",
+    recovery: true,
+}
