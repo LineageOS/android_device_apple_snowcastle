@@ -19,6 +19,11 @@ $(call inherit-product, device/mainline/common/mainline_common.mk)
 # APEX
 OVERRIDE_PRODUCT_COMPRESSED_APEX := false
 
+# Bluetooth
+PRODUCT_PACKAGES += \
+    hcdpack \
+    hcdpack.recovery
+
 # Bootanimation
 ifeq ($(PRODUCT_IS_GO),true)
 TARGET_SCREEN_WIDTH := 100
