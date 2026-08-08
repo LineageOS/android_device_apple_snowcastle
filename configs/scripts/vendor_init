@@ -1,0 +1,3 @@
+#!/vendor/bin/sh_bootstrap
+
+source /vendor/bin/generate_firmware
