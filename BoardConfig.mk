@@ -90,18 +90,16 @@ TARGET_KERNEL_CONFIG_EXT += \
 endif
 
 # Kernel modules
-BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD := \
-    $(strip $(shell cat $(DEVICE_PATH)/configs/modprobe/modules.load.basic))
-ifneq ($(wildcard $(TARGET_KERNEL_SOURCE)/drivers/dma/apple-sio-dma.c),)
-BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD += \
-    $(strip $(shell cat $(DEVICE_PATH)/configs/modprobe/modules.load.touchscreen))
-endif
-BOARD_VENDOR_KERNEL_MODULES_LOAD := \
-    $(BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD)
+BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD :=
+BOARD_VENDOR_KERNEL_MODULES_LOAD :=
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD :=
 BOOT_KERNEL_MODULES :=
 RECOVERY_KERNEL_MODULES := \
-    $(BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD)
+    $(strip $(shell cat $(DEVICE_PATH)/configs/modprobe/modules.include.basic))
+ifneq ($(wildcard $(TARGET_KERNEL_SOURCE)/drivers/dma/apple-sio-dma.c),)
+RECOVERY_KERNEL_MODULES += \
+    $(strip $(shell cat $(DEVICE_PATH)/configs/modprobe/modules.include.touchscreen))
+endif
 TARGET_AUTO_COLLECT_KERNEL_MODULE_DEPS := true
 
 ifeq ($(shell grep modules_install $(TARGET_KERNEL_SOURCE)-modules/linux-apfs-rw/Makefile),)
