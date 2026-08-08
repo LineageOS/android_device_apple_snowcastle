@@ -54,14 +54,18 @@ function verify_sha256() {
 # Main functions
 function initialize() {
     case $DEVICE in
-        "D11")
+        "D11"|"D111")
             APFS_DEVICE=/dev/block/nvme0n1p1
             APFS_ROOT_VOL=0
             APFS_PREBOOT_VOL=5
             SYSCFG_DEVICE=/dev/block/nvme0n3
             KERNELCACHE_SHA256=3588eeca5ec84024fa11aeef1dc5a2f2e3d092fb82eff3a9d3e5a80f2606ec1d
             FW_MAKEZ2FW_PARAM="--dynamic-calibration C1F5E,2"
-            FW_MAKEZ2FW_PATH="apple/dfrmtfw-d11-c1f5e-2.bin"
+            if [ "$DEVICE" = "D11" ]; then
+                FW_MAKEZ2FW_PATH="apple/dfrmtfw-d11-c1f5e-2.bin"
+            elif [ "$DEVICE" = "D111" ]; then
+                FW_MAKEZ2FW_PATH="apple/dfrmtfw-d111-c1f5e-2.bin"
+            fi
             FW_MAKEZ2FW_SHA256=57f094f2afbc21c3eca511f5b5d0a90e276789a0a5e8f770528e682fdfa660d6
             FW_MAKEZ2FW_SOURCE="root/usr/share/firmware/multitouch/D11.mtprops"
             FW_MAKEZ2FW_SOURCE_SHA256=7f9b16b749dd0f3e12633ce5140220ea89317006dc0278b24cf2d815578e3ff6
@@ -188,6 +192,42 @@ function do_hcdpack_d11() {
     cd $MNT_APFS_DIR
 }
 
+function copy_wifi_firmwares_d111() {
+    local WIFI_SOURCE=root/usr/share/firmware/wifi/C-4355__s-C0
+    $TOYBOX install -m 0644 "$WIFI_SOURCE/olaf.trx" \
+    $FW_GEN_DIR/brcm/brcmfmac4355-pcie.apple,olaf.bin
+    $TOYBOX install -m 0644 "$WIFI_SOURCE/olaf.clmb" \
+    $FW_GEN_DIR/brcm/brcmfmac4355-pcie.apple,olaf.clm_blob
+    $TOYBOX install -m 0644 "$WIFI_SOURCE/olaf.txcb" \
+    $FW_GEN_DIR/brcm/brcmfmac4355-pcie.apple,olaf.txcap_blob
+    $TOYBOX install -m 0644 "$WIFI_SOURCE/P-olaf_M-PRNL_V-m__m-5.3.txt" \
+    $FW_GEN_DIR/brcm/brcmfmac4355-pcie.apple,olaf-PRNL-m-5.3.txt
+    $TOYBOX install -m 0644 "$WIFI_SOURCE/P-olaf_M-PRNL_V-m__m-5.7.txt" \
+    $FW_GEN_DIR/brcm/brcmfmac4355-pcie.apple,olaf-PRNL-m-5.7.txt
+    $TOYBOX install -m 0644 "$WIFI_SOURCE/P-olaf_M-PRNL_V-u__m-5.3.txt" \
+    $FW_GEN_DIR/brcm/brcmfmac4355-pcie.apple,olaf-PRNL-u-5.3.txt
+    $TOYBOX install -m 0644 "$WIFI_SOURCE/P-olaf_M-PRNL_V-u__m-5.9.txt" \
+    $FW_GEN_DIR/brcm/brcmfmac4355-pcie.apple,olaf-PRNL-u-5.9.txt
+}
+
+function do_hcdpack_d111() {
+    local BLUETOOL=$($TOYBOX realpath root/usr/sbin/BlueTool)
+    verify_sha256 $BLUETOOL 78115abe9705d30596768231d2f1587bf68670f6a7a2d1db7d88620aa54cca8d
+
+    cd $FW_GEN_DIR/brcm
+
+    hcdpack \
+        "$BLUETOOL" \
+        'C-4355__s-C0' \
+        olaf \
+        'M-PRNL_V-m__m-5.7' \
+        BCM.apple,d111.hcd
+
+    verify_sha256 BCM.apple,d111.hcd 4b5174cdfce25ae2e407a9f934866546ce204a202925074b32c5dc7cf96db714
+
+    cd $MNT_APFS_DIR
+}
+
 # Main flow
 $TOYBOX echo "generate_firmware begin"
 
@@ -204,6 +244,10 @@ case $DEVICE in
     "D11")
         copy_wifi_firmwares_d11
         do_hcdpack_d11
+        ;;
+    "D111")
+        copy_wifi_firmwares_d111
+        do_hcdpack_d111
         ;;
 esac
 
