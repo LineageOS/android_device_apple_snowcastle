@@ -1,0 +1,20 @@
+cc_library {
+    name: "libmxml",
+    srcs: ["makez2fw/mxml-3.1/*.c"],
+    export_include_dirs: ["makez2fw/mxml-3.1"],
+    local_include_dirs: ["makez2fw/mxml-3.1"],
+    host_supported: true,
+    recovery_available: true,
+    vendor: true,
+}
+
+cc_binary {
+    name: "makez2fw",
+    srcs: ["makez2fw/*.c"],
+    local_include_dirs: ["makez2fw"],
+    shared_libs: ["libmxml"],
+    bootstrap: true,
+    host_supported: true,
+    recovery_available: true,
+    vendor: true,
+}

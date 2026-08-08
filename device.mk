@@ -69,6 +69,11 @@ PRODUCT_PACKAGES += \
 $(call soong_config_set_bool,mainline_common_libinit,set_dalvik_heap,false)
 endif
 
+# Input
+PRODUCT_PACKAGES += \
+    makez2fw \
+    makez2fw.recovery
+
 # Images
 PRODUCT_BUILD_BOOT_IMAGE := true
 PRODUCT_BUILD_DEBUG_BOOT_IMAGE := true
