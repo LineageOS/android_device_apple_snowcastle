@@ -1,0 +1,214 @@
+# No shebang for this script
+
+# Constants
+DT_DIR=/sys/firmware/devicetree/base
+FW_GEN_DIR=/mnt/vendor/firmware_gen
+MNT_APFS_DIR=/mnt/apfs
+PREBOOT_MOUNTED=/mnt/vendor/generic_init/android
+TMP_DIR=$FW_GEN_DIR/tmp
+
+if [ "$TEST" = "1" ]; then
+    TOYBOX=toybox
+elif [ -f "/system/bin/recovery" ]; then
+    PATH=/system/bin:/system/xbin
+    TOYBOX=toybox
+else
+    PATH=/vendor/bin:/vendor/xbin
+    TOYBOX=toybox_vendor_bootstrap
+fi
+
+# Device info
+DEVICE=$($TOYBOX cat $DT_DIR/smbios/smbios/baseboard/product)
+
+# Variables to be set
+APFS_DEVICE=
+APFS_ROOT_VOL=
+APFS_PREBOOT_VOL=
+SYSCFG_DEVICE=
+
+KERNELCACHE_SHA256=
+
+FW_MAKEZ2FW_PARAM=
+FW_MAKEZ2FW_PATH=
+FW_MAKEZ2FW_SHA256=
+FW_MAKEZ2FW_SOURCE=
+FW_MAKEZ2FW_SOURCE_SHA256=
+
+FW_SMARTIO_OFFSET=
+FW_SMARTIO_SIZE=
+FW_SMARTIO_PATH=
+FW_SMARTIO_SHA256=
+
+# Utility functions
+function verify_sha256() {
+    local file_sha256=$($TOYBOX sha256sum $1 | $TOYBOX cut -d ' ' -f 1)
+    local expect_sha256=$2
+    if [ ! "$expect_sha256" ]; then return 0; fi
+    if [ "$file_sha256" != "$expect_sha256" ]; then
+        $TOYBOX echo "Error: SHA256 mismatch for file $1"
+        return 1
+    fi
+    return 0
+}
+
+# Main functions
+function initialize() {
+    case $DEVICE in
+        "D11")
+            APFS_DEVICE=/dev/block/nvme0n1p1
+            APFS_ROOT_VOL=0
+            APFS_PREBOOT_VOL=5
+            SYSCFG_DEVICE=/dev/block/nvme0n3
+            KERNELCACHE_SHA256=3588eeca5ec84024fa11aeef1dc5a2f2e3d092fb82eff3a9d3e5a80f2606ec1d
+            FW_MAKEZ2FW_PARAM="--dynamic-calibration C1F5E,2"
+            FW_MAKEZ2FW_PATH="apple/dfrmtfw-d11-c1f5e-2.bin"
+            FW_MAKEZ2FW_SHA256=57f094f2afbc21c3eca511f5b5d0a90e276789a0a5e8f770528e682fdfa660d6
+            FW_MAKEZ2FW_SOURCE="root/usr/share/firmware/multitouch/D11.mtprops"
+            FW_MAKEZ2FW_SOURCE_SHA256=7f9b16b749dd0f3e12633ce5140220ea89317006dc0278b24cf2d815578e3ff6
+            FW_SMARTIO_OFFSET=$((0x02705000))
+            FW_SMARTIO_SIZE=$((0x00088060))
+            FW_SMARTIO_PATH="apple/t8010-smartio.bin"
+            FW_SMARTIO_SHA256=408adbb05e75469cbd9c4d94624fd116ae58be5f87cf40b5e495242a83140bcb
+            ;;
+        "D21")
+            APFS_DEVICE=/dev/block/nvme0n1p1
+            APFS_ROOT_VOL=0
+            APFS_PREBOOT_VOL=5
+            ;;
+        *)
+            $TOYBOX echo "Device $DEVICE is currently not supported"
+            exit 1
+            ;;
+    esac
+
+    if [ ! -e "$APFS_DEVICE" ]; then
+        $TOYBOX echo "Error: $APFS_DEVICE does not exist"
+        exit 1
+    fi
+}
+
+function create_dirs() {
+    $TOYBOX mkdir $FW_GEN_DIR
+    $TOYBOX mount -t tmpfs -o size=512M none $FW_GEN_DIR
+    $TOYBOX mkdir $FW_GEN_DIR/{apple,brcm}
+    $TOYBOX mkdir $TMP_DIR
+    $TOYBOX mkdir -p $MNT_APFS_DIR/{root,preboot}
+}
+
+function mount_apfs() {
+    $TOYBOX mount -t apfs -o ro,vol=$APFS_ROOT_VOL $APFS_DEVICE root
+    if [ -f "$PREBOOT_MOUNTED/active" ]; then
+        $TOYBOX mount --rbind $PREBOOT_MOUNTED preboot
+    else
+        $TOYBOX mount -t apfs -o ro,vol=$APFS_PREBOOT_VOL $APFS_DEVICE preboot
+    fi
+}
+
+function extract_kernel_cache() {
+    $TOYBOX cp preboot/$($TOYBOX cat preboot/active)/System/Library/Caches/com.apple.kernelcaches/kernelcache $TMP_DIR
+    cd $TMP_DIR
+    ipsw img4 extract --im4p kernelcache
+    ipsw img4 im4p extract kernelcache.im4p
+    verify_sha256 kernelcache.payload $KERNELCACHE_SHA256
+    cd $MNT_APFS_DIR
+}
+
+function extract_smartio() {
+    if [ ! "$FW_SMARTIO_PATH" ]; then return; fi
+    local out=$FW_GEN_DIR/$FW_SMARTIO_PATH
+    $TOYBOX dd if=$TMP_DIR/kernelcache.payload of=$out bs=1 skip=$FW_SMARTIO_OFFSET count=$FW_SMARTIO_SIZE
+    if ! verify_sha256 $out $FW_SMARTIO_SHA256; then $TOYBOX rm $out; fi
+}
+
+function do_hKernelFWExtractor() {
+    hKernelFWExtractor $TMP_DIR/kernelcache.payload $FW_GEN_DIR
+}
+
+function do_makez2fw() {
+    if [ ! "$FW_MAKEZ2FW_PATH" ]; then return; fi
+    local out=$FW_GEN_DIR/$FW_MAKEZ2FW_PATH
+    verify_sha256 $FW_MAKEZ2FW_SOURCE $FW_MAKEZ2FW_SOURCE_SHA256
+    makez2fw $FW_MAKEZ2FW_PARAM $FW_MAKEZ2FW_SOURCE $out
+    verify_sha256 $out $FW_MAKEZ2FW_SHA256
+}
+
+function umount_apfs() {
+    $TOYBOX umount root
+    $TOYBOX umount preboot
+}
+
+function cleanup() {
+    $TOYBOX rm -rf $TMP_DIR
+    $TOYBOX rmdir $MNT_APFS_DIR/* $MNT_APFS_DIR
+    if [ "$TEST" = "1" ]; then
+        $TOYBOX umount $FW_GEN_DIR
+        $TOYBOX rm -rf $FW_GEN_DIR
+    fi
+}
+
+# Device-specific functions
+function copy_wifi_firmwares_d11() {
+    local WIFI_SOURCE=root/usr/share/firmware/wifi/C-4355__s-C0
+    $TOYBOX install -m 0644 "$WIFI_SOURCE/sven.trx" \
+    $FW_GEN_DIR/brcm/brcmfmac4355-pcie.apple,sven.bin
+    $TOYBOX install -m 0644 "$WIFI_SOURCE/sven.clmb" \
+    $FW_GEN_DIR/brcm/brcmfmac4355-pcie.apple,sven.clm_blob
+    $TOYBOX install -m 0644 "$WIFI_SOURCE/sven.txcb" \
+    $FW_GEN_DIR/brcm/brcmfmac4355-pcie.apple,sven.txcap_blob
+    $TOYBOX install -m 0644 "$WIFI_SOURCE/P-sven_M-PRNL_V-m__m-5.3.txt" \
+    $FW_GEN_DIR/brcm/brcmfmac4355-pcie.apple,sven-PRNL-m-5.3.txt
+    $TOYBOX install -m 0644 "$WIFI_SOURCE/P-sven_M-PRNL_V-m__m-5.7.txt" \
+    $FW_GEN_DIR/brcm/brcmfmac4355-pcie.apple,sven-PRNL-m-5.7.txt
+    $TOYBOX install -m 0644 "$WIFI_SOURCE/P-sven_M-PRNL_V-u__m-5.3.txt" \
+    $FW_GEN_DIR/brcm/brcmfmac4355-pcie.apple,sven-PRNL-u-5.3.txt
+    $TOYBOX install -m 0644 "$WIFI_SOURCE/P-sven_M-PRNL_V-u__m-5.9.txt" \
+    $FW_GEN_DIR/brcm/brcmfmac4355-pcie.apple,sven-PRNL-u-5.9.txt
+}
+
+function do_hcdpack_d11() {
+    local BLUETOOL=$($TOYBOX realpath root/usr/sbin/BlueTool)
+    verify_sha256 $BLUETOOL 78115abe9705d30596768231d2f1587bf68670f6a7a2d1db7d88620aa54cca8d
+
+    cd $FW_GEN_DIR/brcm
+
+    hcdpack \
+        "$BLUETOOL" \
+        'C-4355__s-C0' \
+        sven \
+        'M-PRNL_V-m__m-5.7' \
+        BCM.apple,d11.sven-murata.hcd
+
+    hcdpack \
+        "$BLUETOOL" \
+        'C-4355__s-C0' \
+        sven \
+        'M-PRNL_V-u__m-5.9' \
+        BCM.apple,d11.sven-usi.hcd
+
+    cd $MNT_APFS_DIR
+}
+
+# Main flow
+$TOYBOX echo "generate_firmware begin"
+
+initialize
+create_dirs
+cd $MNT_APFS_DIR
+mount_apfs
+extract_kernel_cache
+extract_smartio
+do_hKernelFWExtractor
+do_makez2fw
+
+case $DEVICE in
+    "D11")
+        copy_wifi_firmwares_d11
+        do_hcdpack_d11
+        ;;
+esac
+
+umount_apfs
+cleanup
+
+$TOYBOX echo "generate_firmware end"
+exit 0
