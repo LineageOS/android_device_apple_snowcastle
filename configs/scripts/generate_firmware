@@ -28,6 +28,7 @@ APFS_DEVICE=
 APFS_ROOT_VOL=
 APFS_PREBOOT_VOL=
 SYSCFG_DEVICE=
+SYSCFG_SIZE=
 
 KERNELCACHE_SHA256=
 
@@ -36,6 +37,7 @@ FW_MAKEZ2FW_PATH=
 FW_MAKEZ2FW_SHA256=
 FW_MAKEZ2FW_SOURCE=
 FW_MAKEZ2FW_SOURCE_SHA256=
+FW_MAKEZ2FW_USE_SYSCFG=
 
 FW_SMARTIO_OFFSET=
 FW_SMARTIO_SIZE=
@@ -81,6 +83,23 @@ function initialize() {
             APFS_DEVICE=/dev/block/nvme0n1p1
             APFS_ROOT_VOL=0
             APFS_PREBOOT_VOL=5
+            ;;
+        "J172")
+            APFS_DEVICE=/dev/block/nvme0n1p1
+            APFS_ROOT_VOL=0
+            APFS_PREBOOT_VOL=5
+            SYSCFG_DEVICE=/dev/block/nvme0n3
+            SYSCFG_SIZE=131072
+            KERNELCACHE_SHA256=f0c322154b4927f230b0ed1d06ec445872d6b809c1a0d2acbef36e177c5379e3
+            FW_MAKEZ2FW_PARAM="K1F19,6"
+            FW_MAKEZ2FW_PATH="apple/dfrmtfw-j172-k1f19-6.bin"
+            FW_MAKEZ2FW_SOURCE="root/usr/share/firmware/multitouch/J172_Multitouch.im4p"
+            FW_MAKEZ2FW_SOURCE_SHA256=cb67cae5956af0ead9f4ffbc2a5e6f2ffdfea667db51e379d24fd3b6713ffbdf
+            FW_MAKEZ2FW_USE_SYSCFG=true
+            FW_SMARTIO_OFFSET=$((0x02A46000))
+            FW_SMARTIO_SIZE=$((0x00088060))
+            FW_SMARTIO_PATH="apple/t8010-smartio.bin"
+            FW_SMARTIO_SHA256=71d274a106f5912ed33552ba75ae76cc5081fc7063935ec938f9cb503df38199
             ;;
         *)
             $TOYBOX echo "Device $DEVICE is currently not supported"
@@ -135,7 +154,12 @@ function do_makez2fw() {
     if [ ! "$FW_MAKEZ2FW_PATH" ]; then return; fi
     local out=$FW_GEN_DIR/$FW_MAKEZ2FW_PATH
     verify_sha256 $FW_MAKEZ2FW_SOURCE $FW_MAKEZ2FW_SOURCE_SHA256
-    makez2fw $FW_MAKEZ2FW_PARAM $FW_MAKEZ2FW_SOURCE $out
+    if [ "$FW_MAKEZ2FW_USE_SYSCFG" = "true" ]; then
+        dd if=$SYSCFG_DEVICE of=$TMP_DIR/syscfg.bin bs=$SYSCFG_SIZE count=1
+        makez2fw $FW_MAKEZ2FW_PARAM $FW_MAKEZ2FW_SOURCE $TMP_DIR/syscfg.bin $out
+    else
+        makez2fw $FW_MAKEZ2FW_PARAM $FW_MAKEZ2FW_SOURCE $out
+    fi
     verify_sha256 $out $FW_MAKEZ2FW_SHA256
 }
 
@@ -231,6 +255,24 @@ function do_hcdpack_d111() {
     cd $MNT_APFS_DIR
 }
 
+function do_hcdpack_j172() {
+    local BLUETOOL=$($TOYBOX realpath root/usr/sbin/BlueTool)
+    verify_sha256 $BLUETOOL dadd9b2086cbc98bb498e4899ce42303a3a03fe0509955bf2de583447532b0e0
+
+    cd $FW_GEN_DIR/brcm
+
+    hcdpack \
+        "$BLUETOOL" \
+        'C-4355__s-C1' \
+        rudderB \
+        'M-YSBU_V-m__m-2.5' \
+        BCM4355C1.hcd
+
+    verify_sha256 BCM4355C1.hcd 27b778a87f086d8c23f0ad06c77e4b62de9af83182f100ddf4a6e59b1d4249b7
+
+    cd $MNT_APFS_DIR
+}
+
 # Main flow
 $TOYBOX echo "generate_firmware begin"
 
@@ -251,6 +293,9 @@ case $DEVICE in
     "D111")
         copy_wifi_firmwares_d111
         do_hcdpack_d111
+        ;;
+    "J172")
+        do_hcdpack_j172
         ;;
 esac
 
