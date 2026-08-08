@@ -72,6 +72,12 @@ $(call soong_config_set,mainline_common_libinit,set_properties_from,devicetree)
 ifneq ($(SNOWCASTLE_PARTITION_SCHEME),normal)
 PRODUCT_PACKAGES += \
     generic_init_first_stage
+
+PRODUCT_PACKAGES += \
+    sh_vendor_bootstrap \
+    toybox_vendor_bootstrap \
+    vendor_init
+
 $(call soong_config_set_bool,mainline_common_libinit,set_dalvik_heap,false)
 endif
 
