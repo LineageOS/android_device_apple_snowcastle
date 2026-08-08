@@ -1,0 +1,11 @@
+cc_binary {
+    name: "hcdpack",
+    srcs: ["hcdpack.c"],
+    cflags: [
+        "-D_DARWIN_C_SOURCE",
+    ],
+    bootstrap: true,
+    host_supported: true,
+    recovery_available: true,
+    vendor: true,
+}
