@@ -29,6 +29,9 @@ on init
     # Undo the override from system init.rc
     write /proc/sys/kernel/modprobe /vendor/bin/modprobe_kernel
 
+on early-boot
+    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -s -d /vendor/lib/modules --all=/vendor/etc/modules.load.normal
+
 # Mount
 on fs
     # Mount everything that does not require fsck

@@ -112,6 +112,20 @@ PRODUCT_USE_DYNAMIC_PARTITION_SIZE := true
 PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
 
 # Kernel modules
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PATH)/configs/modprobe/modules.blocklist:$(TARGET_COPY_OUT_RECOVERY)/root/lib/modules/modules.blocklist
+ifeq ($(SNOWCASTLE_PARTITION_SCHEME),normal)
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PATH)/configs/modprobe/modules.blocklist:$(TARGET_COPY_OUT_VENDOR)/lib/modules/modules.blocklist
+else
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PATH)/configs/modprobe/modules.blocklist:$(TARGET_COPY_OUT_VENDOR_DLKM)/lib/modules/modules.blocklist
+endif
+
+PRODUCT_PACKAGES += \
+    modules.load.normal \
+    modules.load.normal.recovery
+
 PRODUCT_PACKAGES += \
     modprobe_kernel
 
