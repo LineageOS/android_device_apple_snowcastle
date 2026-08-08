@@ -48,7 +48,9 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_PACKAGES += \
     hKernelFWExtractor \
-    hKernelFWExtractor.recovery
+    hKernelFWExtractor.recovery \
+    ipsw \
+    ipsw.recovery
 
 # HIDL
 PRODUCT_PACKAGES += \

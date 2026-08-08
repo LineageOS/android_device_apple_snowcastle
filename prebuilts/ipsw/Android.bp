@@ -1,0 +1,17 @@
+cc_prebuilt_binary {
+    name: "ipsw",
+    owner: "blacktop",
+    target: {
+        android_arm64: {
+            srcs: [
+                "ipsw",
+            ],
+        },
+    },
+    compile_multilib: "64",
+    strip: {
+        none: true,
+    },
+    recovery_available: true,
+    vendor: true,
+}
