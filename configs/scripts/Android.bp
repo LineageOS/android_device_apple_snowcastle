@@ -1,0 +1,5 @@
+sh_binary {
+    name: "vendor_init",
+    src: "vendor_init",
+    vendor: true,
+}
