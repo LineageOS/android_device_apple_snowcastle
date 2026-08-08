@@ -21,12 +21,13 @@ TARGET_CPU_VARIANT := generic
 # Boot parameters
 BOARD_KERNEL_CMDLINE := \
     $(MAINLINE_COMMON_ANDROIDBOOT_PARAMS) \
-    $(MAINLINE_COMMON_KERNEL_PARAMS) \
+    $(filter-out firmware_class.path=%,$(MAINLINE_COMMON_KERNEL_PARAMS)) \
     androidboot.fstab_suffix=$(SNOWCASTLE_PARTITION_SCHEME) \
     androidboot.hardware=snowcastle \
     androidboot.serialno=snowcastle \
     androidboot.verifiedbootstate=orange \
-    console=tty0
+    console=tty0 \
+    firmware_class.path=/mnt/vendor/firmware_gen/
 
 BOARD_KERNEL_CMDLINE_BOOT := \
     sysctl.kernel.modprobe=/vendor/bin/modprobe_kernel
