@@ -33,7 +33,7 @@ BOARD_KERNEL_CMDLINE_BOOT := \
 
 BOARD_KERNEL_CMDLINE_RECOVERY :=
 
-ifneq ($(SNOWCASTLE_PARTITION_SCHEME),normal)
+ifneq ($(SNOWCASTLE_USE_GENERIC_INIT),true)
 BOARD_KERNEL_CMDLINE_BOOT += \
     androidboot.init_fatal_pause=true \
     androidboot.mount_firmware=false \
@@ -45,6 +45,10 @@ ifeq ($(SNOWCASTLE_PARTITION_SCHEME),apfs)
 BOARD_KERNEL_CMDLINE_BOOT += \
     androidboot.mount_system=imgs \
     androidboot.mount_userdata=tmpfs
+else ifeq ($(SNOWCASTLE_PARTITION_SCHEME),normal)
+BOARD_KERNEL_CMDLINE_BOOT += \
+    androidboot.mount_system=std_parts \
+    androidboot.mount_userdata=std_parts
 endif
 
 # Display

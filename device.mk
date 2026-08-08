@@ -7,7 +7,12 @@ DEVICE_PATH := device/apple/snowcastle
 
 # Defaults
 SNOWCASTLE_PARTITION_SCHEME ?= normal
+SNOWCASTLE_USE_GENERIC_INIT ?= false
 $(warning Using $(SNOWCASTLE_PARTITION_SCHEME) partition scheme)
+
+ifeq ($(SNOWCASTLE_PARTITION_SCHEME),apfs)
+SNOWCASTLE_USE_GENERIC_INIT := true
+endif
 
 # Inherit from mainline/common
 TARGET_HEALTH_HAL := default-aidl
@@ -37,6 +42,7 @@ endif
 ifeq ($(PRODUCT_IS_GO),true)
 $(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
 else ifeq ($(SNOWCASTLE_PARTITION_SCHEME),apfs)
+# APFS stores userdata in RAM, so let's save some RAM
 $(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
 else
 $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
@@ -69,10 +75,14 @@ PRODUCT_PACKAGES += \
 $(call soong_config_set,libinit,vendor_init_lib,//$(DEVICE_PATH):init_snowcastle)
 $(call soong_config_set,mainline_common_libinit,set_properties_from,devicetree)
 
-ifneq ($(SNOWCASTLE_PARTITION_SCHEME),normal)
+ifeq ($(SNOWCASTLE_PARTITION_SCHEME),apfs)
+# Not to override statically set dalvik heap
+$(call soong_config_set_bool,mainline_common_libinit,set_dalvik_heap,false)
+endif
+
+ifeq ($(SNOWCASTLE_USE_GENERIC_INIT),true)
 PRODUCT_PACKAGES += \
     generic_init_first_stage
-$(call soong_config_set_bool,mainline_common_libinit,set_dalvik_heap,false)
 endif
 
 # Input
