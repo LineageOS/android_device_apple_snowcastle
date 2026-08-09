@@ -7,4 +7,4 @@ if [ ! -f "$SYSCFG" ]; then
 fi
 
 cat m1n1.bin m1n1-vars-boot.txt dtb.img $SYSCFG kernel ramdisk.img > m1n1-boot.bin
-cat m1n1.bin m1n1-vars-boot.txt dtb.img $SYSCFG kernel ramdisk-recovery.img > m1n1-recovery.bin
+cat m1n1.bin m1n1-vars-recovery.txt dtb.img $SYSCFG kernel ramdisk-recovery.img > m1n1-recovery.bin
