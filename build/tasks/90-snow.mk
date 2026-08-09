@@ -5,11 +5,23 @@
 
 ifeq ($(USES_DEVICE_APPLE_SNOWCASTLE),true)
 
+MAKE_M1N1_BLOBS_SH_PATH := $(DEVICE_PATH)/configs/scripts/make-m1n1-blobs.sh
+INSTALLED_MAKE_M1N1_BLOBS_SH_TARGET := $(PRODUCT_OUT)/make-m1n1-blobs.sh
+$(INSTALLED_MAKE_M1N1_BLOBS_SH_TARGET): $(MAKE_M1N1_BLOBS_SH_PATH)
+	$(transform-prebuilt-to-target)
+
+MAKE_M1N1_BLOBS_BAT_PATH := $(DEVICE_PATH)/configs/scripts/make-m1n1-blobs.bat
+INSTALLED_MAKE_M1N1_BLOBS_BAT_TARGET := $(PRODUCT_OUT)/make-m1n1-blobs.bat
+$(INSTALLED_MAKE_M1N1_BLOBS_BAT_TARGET): $(MAKE_M1N1_BLOBS_BAT_PATH)
+	$(transform-prebuilt-to-target)
+
 LOCAL_INCLUDE_IN_PRODUCT_OUT += \
     dtb.img \
     kernel \
     m1n1-vars-boot.txt \
     m1n1-vars-recovery.txt \
+    make-m1n1-blobs.bat \
+    make-m1n1-blobs.sh \
     ramdisk.img \
     ramdisk-recovery.img \
     system.img \
