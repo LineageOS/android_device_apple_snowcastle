@@ -9,7 +9,7 @@ We have no way to tether boot Android yet.
 
 ## Available HoolockLinux derivations
 
-- Pauli1Go: Provides touchscreen & Wi-Fi & Bluetooth & charging support for iPhone 7 series and iPad 7.
+- Pauli1Go: Provides touchscreen & Wi-Fi & Bluetooth & charging support for iPhone 7 Plus and iPad 7.
 Due to the fact that the effort involves assistance from AI, the HoolockLinux developers does not accept contribution with it.
 
 | Name | Homepage | Kernel URL | m1n1 URL |
@@ -93,7 +93,7 @@ For APFS partition scheme, append ` vendor_dlkmimage` to the end of the command.
 
 13. If you're using Pauli1Go's HoolockLinux fork and you want more hardware features to function on the compatible devices:
 
-    1. Do [this](https://github.com/Pauli1Go/HoolockLinux-linux-firmware/blob/main/iphone7.md#9-prepare-private-syscfg-for-the-d111-capable-m1n1-loader) for iPhone 7,
+    1. Do [this](https://github.com/Pauli1Go/HoolockLinux-linux-firmware/blob/main/iphone7.md#9-prepare-private-syscfg-for-the-d111-capable-m1n1-loader) for iPhone 7 Plus,
     or [this](https://github.com/Pauli1Go/HoolockLinux-linux-firmware/blob/main/ipad7.md#10-provide-syscfg-to-the-patched-m1n1-loader) for iPad 7.
     2. Put the generated `m1n1-syscfg.payload` file into `device/apple/snowcastle/prebuilts/` directory.
     3. Start the build again.
