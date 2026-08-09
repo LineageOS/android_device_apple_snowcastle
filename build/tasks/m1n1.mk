@@ -13,40 +13,37 @@ $(warning $(M1N1_SYSCFG_PAYLOAD_PATH) is missing)
 M1N1_SYSCFG_PAYLOAD_PATH :=
 endif
 
-INSTALLED_M1N1_BOOT_TARGET := $(PRODUCT_OUT)/m1n1-boot.bin
-INSTALLED_M1N1_BOOT_TARGET_DEPS := \
-	$(PRODUCT_OUT)/kernel \
-	$(PRODUCT_OUT)/ramdisk.img
+# $(1): output file
+# $(2): additional cmdline
+# $(3): ramdisk image filename
+define make-m1n1-blob-target
+	cat $(M1N1_BIN_PATH) <(echo "chosen.bootargs=$(strip $(BOARD_KERNEL_CMDLINE) $(2))") \
+		$(INSTALLED_DTBIMAGE_TARGET) \
+		$(M1N1_SYSCFG_PAYLOAD_PATH) \
+		$(PRODUCT_OUT)/kernel \
+		$(PRODUCT_OUT)/$(3) > $@
+endef
 
-$(INSTALLED_M1N1_BOOT_TARGET): $(M1N1_BIN_PATH) $(M1N1_SYSCFG_PAYLOAD_PATH) $(INSTALLED_M1N1_BOOT_TARGET_DEPS)
-	cat $(M1N1_BIN_PATH) <(echo "chosen.bootargs=$(strip $(BOARD_KERNEL_CMDLINE) $(BOARD_KERNEL_CMDLINE_BOOT))") \
-		$(INSTALLED_DTBIMAGE_TARGET) $(M1N1_SYSCFG_PAYLOAD_PATH) $(INSTALLED_M1N1_BOOT_TARGET_DEPS) > $@
+# $(1): variant name
+# $(2): ramdisk image filename
+define define-m1n1-blob
+INSTALLED_M1N1_$(call to-upper,$(1))_TARGET := $(PRODUCT_OUT)/m1n1-$(1).bin
+INSTALLED_M1N1_$(call to-upper,$(1))_TARGET_DEPS := \
+	$$(INSTALLED_DTBIMAGE_TARGET) \
+	$$(M1N1_BIN_PATH) \
+	$$(M1N1_SYSCFG_PAYLOAD_PATH) \
+	$$(PRODUCT_OUT)/kernel \
+	$$(PRODUCT_OUT)/$(2)
 
-.PHONY: m1n1-boot
-m1n1-boot: $(INSTALLED_M1N1_BOOT_TARGET)
+$$(INSTALLED_M1N1_$(call to-upper,$(1))_TARGET): $$(INSTALLED_M1N1_$(call to-upper,$(1))_TARGET_DEPS)
+	$$(call make-m1n1-blob-target,$$@,$$(BOARD_KERNEL_CMDLINE_$(call to-upper,$(1))),$(2))
 
-INSTALLED_M1N1_BOOT_DEBUG_TARGET := $(PRODUCT_OUT)/m1n1-boot_debug.bin
-INSTALLED_M1N1_BOOT_DEBUG_TARGET_DEPS := \
-	$(PRODUCT_OUT)/kernel \
-	$(PRODUCT_OUT)/ramdisk-debug.img
+.PHONY: m1n1-$(1)
+m1n1-$(1): $$(INSTALLED_M1N1_$(call to-upper,$(1))_TARGET)
+endef
 
-$(INSTALLED_M1N1_BOOT_DEBUG_TARGET): $(M1N1_BIN_PATH) $(M1N1_SYSCFG_PAYLOAD_PATH) $(INSTALLED_M1N1_BOOT_DEBUG_TARGET_DEPS)
-	cat $(M1N1_BIN_PATH) <(echo "chosen.bootargs=$(strip $(BOARD_KERNEL_CMDLINE) $(BOARD_KERNEL_CMDLINE_BOOT))") \
-		$(INSTALLED_DTBIMAGE_TARGET) $(M1N1_SYSCFG_PAYLOAD_PATH) $(INSTALLED_M1N1_BOOT_DEBUG_TARGET_DEPS) > $@
-
-.PHONY: m1n1-boot_debug
-m1n1-boot_debug: $(INSTALLED_M1N1_BOOT_DEBUG_TARGET)
-
-INSTALLED_M1N1_RECOVERY_TARGET := $(PRODUCT_OUT)/m1n1-recovery.bin
-INSTALLED_M1N1_RECOVERY_TARGET_DEPS := \
-	$(PRODUCT_OUT)/kernel \
-	$(PRODUCT_OUT)/ramdisk-recovery.img
-
-$(INSTALLED_M1N1_RECOVERY_TARGET): $(M1N1_BIN_PATH) $(M1N1_SYSCFG_PAYLOAD_PATH) $(INSTALLED_M1N1_RECOVERY_TARGET_DEPS)
-	cat $(M1N1_BIN_PATH) <(echo "chosen.bootargs=$(strip $(BOARD_KERNEL_CMDLINE) $(BOARD_KERNEL_CMDLINE_RECOVERY))") \
-		$(INSTALLED_DTBIMAGE_TARGET) $(M1N1_SYSCFG_PAYLOAD_PATH) $(INSTALLED_M1N1_RECOVERY_TARGET_DEPS) > $@
-
-.PHONY: m1n1-recovery
-m1n1-recovery: $(INSTALLED_M1N1_RECOVERY_TARGET)
+$(eval $(call define-m1n1-blob,boot,ramdisk.img))
+$(eval $(call define-m1n1-blob,boot_debug,ramdisk-debug.img))
+$(eval $(call define-m1n1-blob,recovery,ramdisk-recovery.img))
 
 endif # USES_DEVICE_APPLE_SNOWCASTLE
