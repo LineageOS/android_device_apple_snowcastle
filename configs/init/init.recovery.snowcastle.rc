@@ -9,7 +9,16 @@ on property:init.svc.recovery=running
     write /sys/class/vtconsole/vtcon1/bind 0
 
 # Firmware
+service generate_firmware /system/bin/sh /system/bin/generate_firmware
+    group root
+    user root
+    seclabel u:r:su:s0
+    stdio_to_kmsg
+    oneshot
+    disabled
+
 on early-init
+    start generate_firmware
     trigger firmware_mounts_complete
 
 # Kernel modules
