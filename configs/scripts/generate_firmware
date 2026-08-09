@@ -10,6 +10,8 @@ MNT_APFS_DIR=/mnt/apfs
 PREBOOT_MOUNTED=/mnt/vendor/generic_init/android
 TMP_DIR=$FW_GEN_DIR/tmp
 
+DONE_INDICATOR=$FW_GEN_DIR/done
+
 if [ "$TEST" = "1" ]; then
     TOYBOX=toybox
 elif [ -f "/system/bin/recovery" ]; then
@@ -274,6 +276,11 @@ function do_hcdpack_j172() {
 }
 
 # Main flow
+if [ -f "$DONE_INDICATOR" ]; then
+    echo "generate_firmware was already done"
+    exit 0
+fi
+
 $TOYBOX echo "generate_firmware begin"
 
 initialize
@@ -301,6 +308,8 @@ esac
 
 umount_apfs
 cleanup
+
+touch $DONE_INDICATOR
 
 $TOYBOX echo "generate_firmware end"
 exit 0
