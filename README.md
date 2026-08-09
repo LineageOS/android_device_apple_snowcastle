@@ -34,19 +34,44 @@ For recent Linux kernel versions:
 
 ## How-to
 
-### Obtain firmwares via hKernelFWExtractor
-
-1. Obtain iOS kernel using blacktop's [ipsw](https://github.com/blacktop/ipsw) tool, for example: `ipsw download ipsw --device iPhone10,1 --build 20H380 --kernel`
-
-2. Extract firmwares from the iOS kernel using [hKernelFWExtractor](https://github.com/HoolockLinux/hKernelFWExtractor).
-
-### Obtain firmwares that are specific to Pauli1Go's HoolockLinux fork
-
-Follow the documentation [here](https://github.com/Pauli1Go/HoolockLinux-linux-firmware).
-
 ### Build m1n1
 
 Please check out the README file in the m1n1 repository.
+
+### Prepare Android build dependencies
+
+Here we use LineageOS as example, and assuming you have already synced the platform source code.
+These instructions are NOT guaranteed to work for any other Android distributions.
+
+1. Setup the build environment: `source build/envsetup.sh`.
+
+2. Select the `snowcastle` target device: `breakfast snowcastle`. This step will automatically clone this device tree.
+
+3. Clone the kernel repository: `mkdir -p kernel/apple && git clone <URL of the kernel repository> kernel/apple/HoolockLinux`.
+
+4. Apply the needed kernel patches and kernel edits according to the table above. If this has already been done previously, skip this step.
+
+5. Download latest LLVM toolchain from [here](https://releases.llvm.org/), and then extract it. If this has already been done previously, skip this step.
+
+6. Do the following to obtain and adapt the necessary `linux-apfs-rw` kernel module:
+
+```
+git clone https://github.com/linux-apfs/linux-apfs-rw kernel/apple/HoolockLinux-modules/linux-apfs-rw
+sed -i 's|KERNEL_DIR|KERNEL_SRC|g;s|make |$(MAKE) |g;s|install:|modules_install:|g' kernel/apple/HoolockLinux-modules/linux-apfs-rw/Makefile
+```
+
+7. If kernel version is v7.2+, execute this to apply a necessary patch: `repopick 494663`.
+
+8. Download `ipsw_<VERSION>_linux_arm64.tar.gz` from the [ipsw releases](https://github.com/blacktop/ipsw/releases) page,
+and extract the `ipsw` file inside it to `device/apple/snowcastle/prebuilts/ipsw/ipsw`.
+
+9. Download utilities source code and put these to respective paths, as described on the table below:
+
+| Source | Destination |
+|--------|-------------|
+| https://github.com/corellium/projectsandcastle/raw/refs/heads/master/hcdpack/hcdpack.c | `device/apple/snowcastle/utilities/hcdpack/hcdpack.c` |
+| https://github.com/HoolockLinux/hKernelFWExtractor | `device/apple/snowcastle/utilities/hKernelFWExtractor/hKernelFWExtractor` |
+| https://github.com/Pauli1Go/HoolockLinux-linux-firmware/tree/main/makez2fw | `device/apple/snowcastle/utilities/makez2fw/makez2fw` |
 
 ### Build Android
 
@@ -55,50 +80,33 @@ These instructions are NOT guaranteed to work for any other Android distribution
 
 1. Setup the build environment: `source build/envsetup.sh`.
 
-2. Select the `snowcastle` target device: `breakfast snowcastle`.
-
-3. Clone the kernel repository: `mkdir -p kernel/apple && git clone <URL of the kernel repository> kernel/apple/HoolockLinux`.
-If this has already been done previously, skip this step.
-
-4. Apply the needed kernel patches and kernel edits according to the table above. If this has already been done previously, skip this step.
-
-5. Select a partition scheme to use.
+2. Select a partition scheme to use.
 
 - `apfs`: Android will be loaded from partition images stored in an APFS volume. Userdata would be stored in RAM, due to the existing APFS support on Linux is not capable of writing yet.
 - `normal`: Android will be loaded from normal partitions on the disk. This requires resizing APFS volume and modifying the partition table on the disk.
 
 Execute this to select the wanted partition scheme: `export SNOWCASTLE_PARTITION_SCHEME=<wanted partition scheme>`
 
-6. Download latest LLVM toolchain from [here](https://releases.llvm.org/), and then extract it. If this has already been done previously, skip this step.
+3. Select the `snowcastle` target device: `breakfast snowcastle`.
 
-7. Specify the full path to extracted latest LLVM toolchain. For example: `export TARGET_KERNEL_CLANG_PATH=~/Downloads/LLVM-22.1.0-Linux-X64`.
+4. Specify the full path to extracted latest LLVM toolchain. For example: `export TARGET_KERNEL_CLANG_PATH=~/Downloads/LLVM-22.1.0-Linux-X64`.
 
-8. Put the extracted firmwares into `device/apple/snowcastle/prebuilts/firmware(/apple)?` directory.
+5. Start the build: `m snow`.
 
-9. If you have selected APFS partition scheme, do the following to obtain and adapt the necessary `linux-apfs-rw` module:
+### Build m1n1 blobs
 
-```
-git clone https://github.com/linux-apfs/linux-apfs-rw kernel/apple/HoolockLinux-modules/linux-apfs-rw
-sed -i 's|KERNEL_DIR|KERNEL_SRC|g;s|make |$(MAKE) |g;s|install:|modules_install:|g' kernel/apple/HoolockLinux-modules/linux-apfs-rw/Makefile
-```
+1. Enter the build output directory (`out/target/product/snowcastle`, or extracted snowcastle package), which contains these files:
+`dtb.img`, `kernel`, `ramdisk.img`, `ramdisk-recovery.img`
+`m1n1-vars-boot.txt`, `m1n1-vars-recovery.txt`,
+`make-m1n1-blobs.bat`, `make-m1n1-blobs.sh`.
 
-If this has already been done previously, skip this step.
+2. If the target device is iPhone 7 Plus, and Pauli1Go's HoolockLinux fork is used, please obtain `m1n1-syscfg.payload` for the device, by following the instructions
+[here](https://github.com/Pauli1Go/HoolockLinux-linux-firmware/blob/main/iphone7.md#9-prepare-private-syscfg-for-the-d111-capable-m1n1-loader).
 
-10. If kernel version is v7.2+, execute this to apply a necessary patch: `repopick 494663`.
+**IMPORTANT: With this step, the output m1n1 blob will be usable for only the exact device where the SysCfg was obtained from!**
+**Using m1n1 blob with SysCfg from other devices is UNTESTED, and may produce unexpectable bad behavior.**
 
-11. Put the built `m1n1.bin` to `device/apple/snowcastle/prebuilts/m1n1.bin`.
-
-12. Start the build: `m m1n1-{boot,recovery} systemimage vendorimage`.
-For APFS partition scheme, append ` vendor_dlkmimage` to the end of the command.
-
-13. If you're using Pauli1Go's HoolockLinux fork and you want more hardware features to function on the compatible devices:
-
-    1. Do [this](https://github.com/Pauli1Go/HoolockLinux-linux-firmware/blob/main/iphone7.md#9-prepare-private-syscfg-for-the-d111-capable-m1n1-loader) for iPhone 7 Plus,
-    or [this](https://github.com/Pauli1Go/HoolockLinux-linux-firmware/blob/main/ipad7.md#10-provide-syscfg-to-the-patched-m1n1-loader) for iPad 7.
-    2. Put the generated `m1n1-syscfg.payload` file into `device/apple/snowcastle/prebuilts/` directory.
-    3. Start the build again.
-
-**IMPORTANT NOTE: The m1n1 blob built after this step is usable ONLY on the device where the `syscfg.bin` is taken from. Using it on other devices may cause unpredictable bad behavior!**
+3. Execute script to build m1n1 blobs: `make-m1n1-blobs.bat` (Windows), or `make-m1n1-blobs.sh` (Linux).
 
 ### Jailbreak and enter device shell
 
