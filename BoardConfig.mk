@@ -30,6 +30,8 @@ BOARD_KERNEL_CMDLINE := \
 
 BOARD_KERNEL_CMDLINE_BOOT := \
     sysctl.kernel.modprobe=/vendor/bin/modprobe_kernel
+BOARD_KERNEL_CMDLINE_BOOT_DEBUG := \
+    $(BOARD_KERNEL_CMDLINE_BOOT)
 
 BOARD_KERNEL_CMDLINE_RECOVERY :=
 
