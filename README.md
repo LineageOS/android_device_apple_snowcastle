@@ -96,17 +96,19 @@ Execute this to select the wanted partition scheme: `export SNOWCASTLE_PARTITION
 ### Build m1n1 blobs
 
 1. Enter the build output directory (`out/target/product/snowcastle`, or extracted snowcastle package), which contains these files:
-`dtb.img`, `kernel`, `ramdisk.img`, `ramdisk-recovery.img`
+`dtb.img`, `kernel`, `ramdisk.img`, `ramdisk-recovery.img`,
 `m1n1-vars-boot.txt`, `m1n1-vars-recovery.txt`,
 `make-m1n1-blobs.bat`, `make-m1n1-blobs.sh`.
 
-2. If the target device is iPhone 7 Plus, and Pauli1Go's HoolockLinux fork is used, please obtain `m1n1-syscfg.payload` for the device, by following the instructions
+2. If `m1n1.bin` does not exist here, copy it to here.
+
+3. If the target device is iPhone 7 Plus, and Pauli1Go's HoolockLinux fork is used, please obtain `m1n1-syscfg.payload` for the device, by following the instructions
 [here](https://github.com/Pauli1Go/HoolockLinux-linux-firmware/blob/main/iphone7.md#9-prepare-private-syscfg-for-the-d111-capable-m1n1-loader).
 
 **IMPORTANT: With this step, the output m1n1 blob will be usable for only the exact device where the SysCfg was obtained from!**
 **Using m1n1 blob with SysCfg from other devices is UNTESTED, and may produce unexpectable bad behavior.**
 
-3. Execute script to build m1n1 blobs: `make-m1n1-blobs.bat` (Windows), or `make-m1n1-blobs.sh` (Linux).
+4. Execute script to build m1n1 blobs: `make-m1n1-blobs.bat` (Windows), or `make-m1n1-blobs.sh` (Linux).
 
 ### Jailbreak and enter device shell
 
