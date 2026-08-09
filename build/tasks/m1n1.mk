@@ -8,6 +8,10 @@ ifeq ($(USES_DEVICE_APPLE_SNOWCASTLE),true)
 M1N1_BIN_PATH := $(DEVICE_PATH)/prebuilts/m1n1.bin
 M1N1_SYSCFG_PAYLOAD_PATH := $(DEVICE_PATH)/prebuilts/m1n1-syscfg.payload
 
+ifeq ($(wildcard $(M1N1_BIN_PATH)),)
+$(warning $(M1N1_BIN_PATH) is missing)
+else
+
 ifeq ($(wildcard $(M1N1_SYSCFG_PAYLOAD_PATH)),)
 $(warning $(M1N1_SYSCFG_PAYLOAD_PATH) is missing)
 M1N1_SYSCFG_PAYLOAD_PATH :=
@@ -45,5 +49,7 @@ endef
 $(eval $(call define-m1n1-blob,boot,ramdisk.img))
 $(eval $(call define-m1n1-blob,boot_debug,ramdisk-debug.img))
 $(eval $(call define-m1n1-blob,recovery,ramdisk-recovery.img))
+
+endif # M1N1_BIN_PATH
 
 endif # USES_DEVICE_APPLE_SNOWCASTLE
