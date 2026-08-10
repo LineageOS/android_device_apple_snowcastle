@@ -309,7 +309,7 @@ esac
 umount_apfs
 cleanup
 
-touch $DONE_INDICATOR
+$TOYBOX touch $DONE_INDICATOR
 
 $TOYBOX echo "generate_firmware end"
 exit 0
