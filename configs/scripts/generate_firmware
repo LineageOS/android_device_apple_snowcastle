@@ -6,7 +6,7 @@ exec 1>&2
 # Constants
 DT_DIR=/sys/firmware/devicetree/base
 FW_GEN_DIR=/mnt/vendor/firmware_gen
-MNT_APFS_DIR=/mnt/apfs
+MNT_APFS_DIR=/mnt/vendor/apfs
 PREBOOT_MOUNTED=/mnt/vendor/generic_init/android
 TMP_DIR=$FW_GEN_DIR/tmp
 
