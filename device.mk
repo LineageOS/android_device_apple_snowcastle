@@ -89,7 +89,7 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_PACKAGES += \
     generic_init_first_stage \
-    generic_init_first_stage_recovery
+    generic_init_second_stage.recovery
 
 PRODUCT_PACKAGES += \
     sh_vendor_bootstrap \
