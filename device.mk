@@ -15,6 +15,7 @@ SNOWCASTLE_USE_GENERIC_INIT := true
 endif
 
 # Inherit from mainline/common
+TARGET_ENABLE_FBKEYBOARD := true
 TARGET_HEALTH_HAL := default-aidl
 TARGET_INITIAL_BRINGUP := true
 TARGET_USES_FRAMEBUFFER_DISPLAY := true
