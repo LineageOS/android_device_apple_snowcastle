@@ -21,6 +21,10 @@ static const std::unordered_map<std::string, std::string> kDtPathToPropertyMap =
         {"smbios/smbios/system/serial", "ro.serialno"},
 };
 
+void vendor_process_bootenv(void) {
+    vendor_process_bootenv_mainline_common();
+}
+
 void vendor_load_properties() {
     vendor_load_properties_mainline_common();
     enable_insecure_debugging();
