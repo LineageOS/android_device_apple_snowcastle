@@ -157,7 +157,3 @@ else
 TARGET_RECOVERY_DENSITY := xxhdpi
 endif
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/configs/fstab/fstab.normal
-
-# VINTF
-DEVICE_MANIFEST_FILE := \
-    $(DEVICE_PATH)/configs/vintf/manifest.xml
