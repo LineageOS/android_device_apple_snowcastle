@@ -16,9 +16,10 @@ endif
 
 # Inherit from mainline/common
 TARGET_ENABLE_FBKEYBOARD := true
+TARGET_GRAPHICS_ALLOCATOR_HAL := minigbm-upstream
+TARGET_GRAPHICS_COMPOSER_HAL := drmfb-composer
 TARGET_HEALTH_HAL := default-aidl
 TARGET_INITIAL_BRINGUP := true
-TARGET_USES_FRAMEBUFFER_DISPLAY := true
 include device/mainline/common/optional/options.mk
 $(call inherit-product, device/mainline/common/mainline_common.mk)
 
@@ -60,10 +61,6 @@ PRODUCT_PACKAGES += \
     hKernelFWExtractor.recovery \
     ipsw \
     ipsw.recovery
-
-# HIDL
-PRODUCT_PACKAGES += \
-    vndservicemanager
 
 # Init
 PRODUCT_COPY_FILES += \
