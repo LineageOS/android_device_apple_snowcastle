@@ -148,6 +148,7 @@ TARGET_BOARD_PLATFORM := snowcastle
 # Properties
 TARGET_PRODUCT_PROP += $(DEVICE_PATH)/configs/properties/product.prop
 TARGET_VENDOR_PROP += \
+    $(DEVICE_PATH)/configs/properties/vendor.prop \
     device/mainline/generic/configs/properties/vendor_bluetooth_profiles.prop
 
 # Recovery
