@@ -60,7 +60,7 @@ git clone https://github.com/linux-apfs/linux-apfs-rw kernel/apple/HoolockLinux-
 sed -i 's|KERNEL_DIR|KERNEL_SRC|g;s|make |$(MAKE) |g;s|install:|modules_install:|g' kernel/apple/HoolockLinux-modules/linux-apfs-rw/Makefile
 ```
 
-7. If kernel version is v7.2+, execute this to apply a necessary patch: `repopick 496351`.
+7. If kernel version is v7.2+, execute this to apply a necessary patch: `repopick -f 496351`.
 
 8. Download `ipsw_<VERSION>_linux_arm64.tar.gz` from the [ipsw releases](https://github.com/blacktop/ipsw/releases) page,
 and extract the `ipsw` file inside it to `device/apple/snowcastle/prebuilts/ipsw/ipsw`.
@@ -72,6 +72,8 @@ and extract the `ipsw` file inside it to `device/apple/snowcastle/prebuilts/ipsw
 | https://github.com/corellium/projectsandcastle/raw/refs/heads/master/hcdpack/hcdpack.c | `device/apple/snowcastle/utilities/hcdpack/hcdpack.c` |
 | https://github.com/HoolockLinux/hKernelFWExtractor | `device/apple/snowcastle/utilities/hKernelFWExtractor/hKernelFWExtractor` |
 | https://github.com/Pauli1Go/HoolockLinux-linux-firmware/tree/main/makez2fw | `device/apple/snowcastle/utilities/makez2fw/makez2fw` |
+
+10. For proper display in recovery mode on iPhone X and later devices, apply patches: `repopick -f -t mainline-recovery-minui`
 
 ### Build Android
 
