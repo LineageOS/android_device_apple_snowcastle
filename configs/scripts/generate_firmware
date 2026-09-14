@@ -18,7 +18,7 @@ elif [ -f "/system/bin/recovery" ]; then
     PATH=/system/bin:/system/xbin
     TOYBOX=toybox
 else
-    PATH=/vendor/bin:/vendor/xbin
+    PATH=/vendor/bin/bootstrap:/vendor/bin:/vendor/xbin
     TOYBOX=toybox_vendor_bootstrap
 fi
 
